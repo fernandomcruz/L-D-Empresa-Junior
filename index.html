@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L&D Engenharia — Empresa Júnior UNESP SJBV</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/logoicon.png">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav__logo">
+      <img src="assets/logosemfundo.png" alt="L&D Engenharia" class="nav__logo-img" />
+      <span class="nav__logo-text">L<span class="amp">&</span>D</span>
+    </div>
+    <ul class="nav__links">
+      <li><a href="#sobre" class="nav__link">Sobre</a></li>
+      <li><a href="#servicos" class="nav__link">Serviços</a></li>
+      <li><a href="#projetos" class="nav__link">Projetos</a></li>
+      <li><a href="#equipe" class="nav__link">Equipe</a></li>
+      <li><a href="#contato" class="nav__link nav__link--cta">Fale Conosco</a></li>
+    </ul>
+    <button class="nav__hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <ul>
+      <li><a href="#sobre" class="mobile-link">Sobre</a></li>
+      <li><a href="#servicos" class="mobile-link">Serviços</a></li>
+      <li><a href="#projetos" class="mobile-link">Projetos</a></li>
+      <li><a href="#equipe" class="mobile-link">Equipe</a></li>
+      <li><a href="#contato" class="mobile-link">Fale Conosco</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__bg-text" aria-hidden="true">ENGENHARIA</div>
+    <div class="hero__content">
+      <p class="hero__eyebrow" data-reveal>Empresa Júnior · UNESP · São João da Boa Vista</p>
+      <h1 class="hero__title" data-reveal>
+        Soluções de<br/>
+        <span class="hero__title-accent">Engenharia</span><br/>
+        com propósito
+      </h1>
+      <p class="hero__subtitle" data-reveal>
+        Inovação acadêmica aplicada ao mundo real. Desenvolvemos projetos de alta qualidade técnica com o rigor da UNESP e a agilidade de quem já pensa no futuro.
+      </p>
+      <div class="hero__actions" data-reveal>
+        <a href="#servicos" class="btn btn--primary">Nossos Serviços</a>
+        <a href="#projetos" class="btn btn--ghost">Ver Projetos</a>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <div class="hero__circle hero__circle--1"></div>
+      <div class="hero__circle hero__circle--2"></div>
+      <div class="hero__circle hero__circle--3"></div>
+      <div class="hero__logo-tilt">
+        <div class="hero__logo-float">
+          <div class="hero__logo-wrap">
+            <img src="assets/logo.png" alt="L&D Engenharia Logo" class="hero__logo-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__stats">
+      <div class="hero__stat" data-reveal>
+        <span class="hero__stat-num" data-count="2">0</span><span class="hero__stat-plus">+</span>
+        <p>Projetos</p>
+      </div>
+      <div class="hero__stat" data-reveal>
+        <span class="hero__stat-num" data-count="28">0</span><span class="hero__stat-plus">+</span>
+        <p>Membros Ativos</p>
+      </div>
+      <div class="hero__stat" data-reveal>
+        <span class="hero__stat-num" data-count="2">0</span><span class="hero__stat-plus">+</span>
+        <p>Anos de Mercado</p>
+      </div>
+    </div>
+    <div class="hero__scroll" aria-hidden="true">
+      <span>Role para explorar</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__inner">
+      <div class="marquee__track">
+        <span>Aeronáutica</span><span class="dot">·</span>
+        <span>Telecomunicações</span><span class="dot">·</span>
+        <span>Eletrônica</span><span class="dot">·</span>
+        <span>Projetos</span><span class="dot">·</span>
+        <span>Inovação</span><span class="dot">·</span>
+        <span>UNESP</span><span class="dot">·</span>
+        <span>Aeronáutica</span><span class="dot">·</span>
+        <span>Telecomunicações</span><span class="dot">·</span>
+        <span>Eletrônica</span><span class="dot">·</span>
+        <span>Projetos</span><span class="dot">·</span>
+        <span>Inovação</span><span class="dot">·</span>
+        <span>UNESP</span><span class="dot">·</span>
+      </div>
+      <div class="marquee__track" aria-hidden="true">
+        <span>Aeronáutica</span><span class="dot">·</span>
+        <span>Telecomunicações</span><span class="dot">·</span>
+        <span>Eletrônica</span><span class="dot">·</span>
+        <span>Projetos</span><span class="dot">·</span>
+        <span>Inovação</span><span class="dot">·</span>
+        <span>UNESP</span><span class="dot">·</span>
+        <span>Aeronáutica</span><span class="dot">·</span>
+        <span>Telecomunicações</span><span class="dot">·</span>
+        <span>Eletrônica</span><span class="dot">·</span>
+        <span>Projetos</span><span class="dot">·</span>
+        <span>Inovação</span><span class="dot">·</span>
+        <span>UNESP</span><span class="dot">·</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <section class="sobre" id="sobre">
+    <div class="container">
+      <div class="sobre__grid">
+        <div class="sobre__left">
+          <p class="label" data-reveal>Quem Somos</p>
+          <h2 class="sobre__title" data-reveal>
+            Nascemos dentro da universidade.<br/>
+            Atuamos no mercado.
+          </h2>
+          <p class="sobre__text" data-reveal>
+            A L&D Engenharia é a empresa júnior da Faculdade de Engenharia de São João da Boa Vista (FESJ-UNESP), formada por estudantes de Engenharia Aeronáutica e Engenharia Eletrônica e de Telecomunicações.
+          </p>
+          <p class="sobre__text" data-reveal>
+            Nossa missão é unir o conhecimento técnico de ponta desenvolvido na universidade às demandas reais de empresas e comunidades, entregando soluções com qualidade, responsabilidade e visão de futuro.
+          </p>
+        </div>
+        <div class="sobre__right" data-reveal>
+          <div class="sobre__card">
+            <h3>Missão</h3>
+            <p>Desenvolver soluções de engenharia que transformem problemas reais em oportunidades de crescimento para nossos clientes e membros.</p>
+          </div>
+          <div class="sobre__card">
+            <h3>Visão</h3>
+            <p>Ser referência nacional em empresas juniores de engenharia, reconhecida pela excelência técnica e pelo impacto positivo na sociedade.</p>
+          </div>
+          <div class="sobre__card">
+            <h3>Valores</h3>
+            <p>Ética, inovação, trabalho em equipe e comprometimento com resultados que fazem diferença.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section class="servicos" id="servicos">
+    <div class="container">
+      <div class="section-header">
+        <p class="label" data-reveal>O que fazemos</p>
+        <h2 class="section-title" data-reveal>Nossos Serviços</h2>
+        <p class="section-sub" data-reveal>Aplicamos o que aprendemos em sala para criar soluções que geram resultado real.</p>
+      </div>
+      <div class="servicos__grid">
+        <div class="servico-card" data-reveal>
+          <div class="servico-card__num">01</div>
+          <div class="servico-card__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L44 14V34L24 44L4 34V14L24 4Z" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/><line x1="24" y1="4" x2="24" y2="16" stroke="currentColor" stroke-width="2"/><line x1="24" y1="32" x2="24" y2="44" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <h3 class="servico-card__title">Projetos Eletrônicos</h3>
+          <p class="servico-card__text">Design e desenvolvimento de circuitos eletrônicos, sistemas embarcados, PCBs e automação de processos industriais.</p>
+          <a href="#contato" class="servico-card__link">Solicitar proposta →</a>
+        </div>
+        <div class="servico-card" data-reveal>
+          <div class="servico-card__num">02</div>
+          <div class="servico-card__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="20" width="40" height="8" rx="2" stroke="currentColor" stroke-width="2"/><path d="M12 20V16M20 20V12M28 20V16M36 20V12" stroke="currentColor" stroke-width="2"/><path d="M12 28V32M20 28V36M28 28V32M36 28V36" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <h3 class="servico-card__title">Telecomunicações</h3>
+          <p class="servico-card__text">Análise, planejamento e otimização de redes de comunicação, sistemas de antenas, RF e infraestrutura de conectividade.</p>
+          <a href="#contato" class="servico-card__link">Solicitar proposta →</a>
+        </div>
+        <div class="servico-card" data-reveal>
+          <div class="servico-card__num">03</div>
+          <div class="servico-card__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 36L24 8L40 36H8Z" stroke="currentColor" stroke-width="2"/><path d="M24 8V24M18 30H30" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="36" r="3" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <h3 class="servico-card__title">Engenharia Aeronáutica</h3>
+          <p class="servico-card__text">Modelagem aerodinâmica, análise estrutural, projetos de drones e consultoria em sistemas aeronáuticos civis e experimentais.</p>
+          <a href="#contato" class="servico-card__link">Solicitar proposta →</a>
+        </div>
+        <div class="servico-card" data-reveal>
+          <div class="servico-card__num">04</div>
+          <div class="servico-card__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="10" width="36" height="28" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 18L22 24L16 30M26 30H32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="servico-card__title">Programação & IoT</h3>
+          <p class="servico-card__text">Desenvolvimento de softwares embarcados, dashboards de monitoramento, sistemas IoT e integração de hardware com nuvem.</p>
+          <a href="#contato" class="servico-card__link">Solicitar proposta →</a>
+        </div>
+        <div class="servico-card" data-reveal>
+          <div class="servico-card__num">05</div>
+          <div class="servico-card__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2"/><path d="M24 8V24L32 32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="servico-card__title">Consultoria Técnica</h3>
+          <p class="servico-card__text">Análise de viabilidade técnica, laudos de engenharia, assessoria em processos produtivos e levantamento de conformidades.</p>
+          <a href="#contato" class="servico-card__link">Solicitar proposta →</a>
+        </div>
+        <div class="servico-card" data-reveal>
+          <div class="servico-card__num">06</div>
+          <div class="servico-card__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 38L20 28L28 36L38 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="38" cy="10" r="4" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <h3 class="servico-card__title">Pesquisa & Desenvolvimento</h3>
+          <p class="servico-card__text">Parceria em projetos de P&D, prototipagem rápida, testes de conceito e relatórios técnicos com suporte dos laboratórios da UNESP.</p>
+          <a href="#contato" class="servico-card__link">Solicitar proposta →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAL -->
+  <section class="diferencial">
+    <div class="diferencial__inner">
+      <p class="diferencial__quote" data-reveal>
+        "Combinamos o rigor técnico da <em>UNESP</em> com a agilidade de uma equipe jovem que vive para <em>resolver</em> problemas de verdade."
+      </p>
+    </div>
+  </section>
+
+  <!-- PROJETOS -->
+  <section class="projetos" id="projetos">
+    <div class="container">
+      <div class="section-header">
+        <p class="label" data-reveal>Portfólio</p>
+        <h2 class="section-title" data-reveal>Projetos em Destaque</h2>
+        <p class="section-sub" data-reveal>Uma seleção dos trabalhos que entregamos com orgulho.</p>
+      </div>
+      <div class="projetos__grid">
+        <div class="projeto-card projeto-card--large" data-reveal>
+          <div class="projeto-card__bg projeto-card__bg--1">
+            <img src="assets/projeto-dashboard.png" alt="Dashboard Pesquisa Eleitoral - Psulista Jr." class="projeto-card__img" />
+          </div>
+          <div class="projeto-card__content">
+            <span class="projeto-card__tag">Análise de Dados</span>
+            <h3>Projeto em parceria com a Paulista Jr.</h3>
+            <p>Focado no cenário político nacional e da cidade de Porto Ferreira - SP para as Eleições de 2026, este projeto consiste no processamento e tratamento de dados coletados em pesquisas com a população. Utilizando o Power BI, a equipe realizou o cruzamento dos dados das entrevistas para criar um dashboard dinâmico e interativo.</p>
+            <span class="projeto-card__year">2026</span>
+          </div>
+        </div>
+        <div class="projeto-card" data-reveal>
+          <div class="projeto-card__bg projeto-card__bg--2">
+            <img src="assets/projeto-materiais.jpeg" alt="Estoque de materiais - Fer Alvarez" class="projeto-card__img" />
+          </div>
+          <div class="projeto-card__content">
+            <span class="projeto-card__tag">Consultoria Técnica</span>
+            <h3>Projeto Fer Alvarez</h3>
+            <p>O  projeto visa reestruturar a gestão logística e o controle de estoques da empresa Fer Alvarez em São João da Boa Vista - SP. Através da aplicação de metodologias de inventário e otimização do layout físico, o objetivo é eliminar gargalos operacionais e divergências </p>
+            <span class="projeto-card__year">2026</span>
+          </div>
+        </div>
+        <div class="projeto-card" data-reveal>
+          <div class="projeto-card__bg projeto-card__bg--3"></div>
+          <div class="projeto-card__content">
+            <span class="projeto-card__tag">L&D</span>
+            <h3>O próximo case pode ser o seu.</h3>
+            <p>Seja para otimizar processos, desenvolver soluções tecnológicas ou criar novos produtos, estamos prontos para transformar seu desafio em resultado.</p>
+            <span class="projeto-card__year">∞</span>
+          </div>
+        </div>
+        <!--
+        <div class="projeto-card" data-reveal>
+          <div class="projeto-card__bg projeto-card__bg--4"></div>
+          <div class="projeto-card__content">
+            <span class="projeto-card__tag">IoT</span>
+            <h3>Dashboard de Monitoramento Energético</h3>
+            <p>Sistema IoT para rastreamento de consumo e alertas de eficiência energética.</p>
+            <span class="projeto-card__year">2024</span>
+          </div>
+        </div>
+      -->
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPE -->
+  <section class="equipe" id="equipe">
+    <div class="container">
+      <div class="section-header">
+        <p class="label" data-reveal>Pessoas</p>
+        <h2 class="section-title" data-reveal>Nossa Equipe</h2>
+        <p class="section-sub" data-reveal>31 estudantes apaixonados por engenharia, prontos para transformar desafios em entregas.</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="equipe__tabs" data-reveal>
+        <button class="equipe__tab equipe__tab--active" data-tab="executiva">Executiva</button>
+        <button class="equipe__tab" data-tab="diretoria">Diretoria</button>
+        <button class="equipe__tab" data-tab="membros">Membros</button>
+      </div>
+
+      <!-- EXECUTIVA -->
+      <div class="equipe__panel equipe__panel--active" data-panel="executiva">
+        <div class="equipe__cards equipe__cards--executiva">
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#581328;--c2:#8B2042">
+              <img src="assets/equipe/MariaClaraSvetlauskis.jpeg" alt="Maria Clara Svetlauskis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">MC</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>Maria Clara Svetlauskis</h4>
+              <p class="membro-card__role">Executiva</p>
+            </div>
+          </div>
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#701634;--c2:#3d0c1c">
+              <img src="assets/equipe/AnnaClaudiaPiaiGroppo.jpeg" alt="Anna Cláudia Piai Groppo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">AC</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>Anna Cláudia Piai Groppo</h4>
+              <p class="membro-card__role">Executiva</p>
+            </div>
+          </div>
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#3d0c1c;--c2:#581328">
+              <img src="assets/equipe/PedroHenriqueBataginFontolan.jpeg" alt="Pedro Henrique Batagin Fontolan" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">PH</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>Pedro Henrique Batagin Fontolan</h4>
+              <p class="membro-card__role">Executiva</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIRETORIA -->
+      <div class="equipe__panel" data-panel="diretoria">
+        <div class="equipe__cards">
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#581328;--c2:#8B2042">
+              <img src="assets/equipe/MatheusSemolinAlvesFarias.jpeg" alt="Matheus Semolin Alves Farias" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">MS</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>Matheus Semolin Alves Farias</h4>
+              <p class="membro-card__role">Diretoria · Aero</p>
+            </div>
+          </div>
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#8B2042;--c2:#581328">
+              <img src="assets/equipe/JoaoPauloSoaresChanfrin.jpeg" alt="João Paulo Soares Chanfrin" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">JP</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>João Paulo Soares Chanfrin</h4>
+              <p class="membro-card__role">Diretoria · Telecom</p>
+            </div>
+          </div>
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#701634;--c2:#3d0c1c">
+              <img src="assets/equipe/GuilhermeFigueiredoBuiochi.jpeg" alt="Guilherme Figueiredo Buiochi" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">GF</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>Guilherme Figueiredo Buiochi</h4>
+              <p class="membro-card__role">Diretoria · Financeiro</p>
+            </div>
+          </div>
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#3d0c1c;--c2:#701634">
+              <img src="assets/equipe/GiovanaNunesdeOliveira.jpeg" alt="Giovana Nunes de Oliveira" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">GO</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>Giovana Nunes de Oliveira</h4>
+              <p class="membro-card__role">Diretoria · RH</p>
+            </div>
+          </div>
+          <div class="membro-card" data-reveal>
+            <div class="membro-card__avatar" style="--c1:#581328;--c2:#3d0c1c">
+              <img src="assets/equipe/PauloCamargoBuenoFilho.jpeg" alt="Paulo Camargo Bueno Filho" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <span class="membro-card__avatar-fallback">PC</span>
+            </div>
+            <div class="membro-card__info">
+              <h4>Paulo Camargo Bueno Filho</h4>
+              <p class="membro-card__role">Diretoria · Marketing</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEMBROS -->
+      <div class="equipe__panel" data-panel="membros">
+        <div class="equipe__area-group">
+          <div class="equipe__area-label">
+            <span class="equipe__area-tag equipe__area-tag--aero">Aeronáutica</span>
+          </div>
+          <div class="equipe__cards">
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#8B2042">
+                <img src="assets/equipe/GabrielPereiraSilva.jpeg" alt="Gabriel Pereira Silva" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">GP</span>
+              </div>
+              <div class="membro-card__info"><h4>Gabriel Pereira Silva</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#8B2042;--c2:#3d0c1c">
+                <img src="assets/equipe/HenriqueBritodeMattos.jpeg" alt="Henrique Brito de Mattos" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">HB</span>
+              </div>
+              <div class="membro-card__info"><h4>Henrique Brito de Mattos</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#3d0c1c;--c2:#581328">
+                <img src="assets/equipe/PedroBondezan.jpeg" alt="Pedro Bondezan" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">PB</span>
+              </div>
+              <div class="membro-card__info"><h4>Pedro Bondezan</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#701634;--c2:#581328">
+                <img src="assets/equipe/RafaelMenezes.jpeg" alt="Rafael Menezes" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">RM</span>
+              </div>
+              <div class="membro-card__info"><h4>Rafael Menezes</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#701634">
+                <img src="assets/equipe/JoaoVitorCunhaMarconi.jpeg" alt="João Vitor Cunha Marconi" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">JV</span>
+              </div>
+              <div class="membro-card__info"><h4>João Vitor Cunha Marconi</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#3d0c1c;--c2:#8B2042">
+                <img src="assets/equipe/LuisAugustoLimaCruz.jpeg" alt="Luis Augusto Lima Cruz" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">LA</span>
+              </div>
+              <div class="membro-card__info"><h4>Luis Augusto Lima Cruz</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#8B2042;--c2:#701634">
+                <img src="assets/equipe/MariaEduardaSimplicio.jpeg" alt="Maria Eduarda Simplicio" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">ME</span>
+              </div>
+              <div class="membro-card__info"><h4>Maria Eduarda Simplicio</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#701634">
+                <img src="assets/equipe/GabrielDiogodaSilva.jpeg" alt="Gabriel Diogo da Silva" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">GD</span>
+              </div>
+              <div class="membro-card__info"><h4>Gabriel Diogo da Silva</h4><p class="membro-card__role">Membro · Aero</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="equipe__area-group">
+          <div class="equipe__area-label">
+            <span class="equipe__area-tag equipe__area-tag--telecom">Telecomunicações</span>
+          </div>
+          <div class="equipe__cards">
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#8B2042">
+                <img src="assets/equipe/FernandoMarquesdaCruz.jpeg" alt="Fernando Marques da Cruz" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">FM</span>
+              </div>
+              <div class="membro-card__info"><h4>Fernando Marques da Cruz</h4><p class="membro-card__role">Membro · Telecom</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#8B2042;--c2:#3d0c1c">
+                <img src="assets/equipe/GabrielKawanakaRubio.jpeg" alt="Gabriel Kawanaka Rubio" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">GK</span>
+              </div>
+              <div class="membro-card__info"><h4>Gabriel Kawanaka Rubio</h4><p class="membro-card__role">Membro · Telecom</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#3d0c1c;--c2:#701634">
+                <img src="assets/equipe/ThiagoMendesSantos.jpeg" alt="Thiago Mendes Santos" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">TS</span>
+              </div>
+              <div class="membro-card__info"><h4>Thiago Mendes Santos</h4><p class="membro-card__role">Membro · Telecom</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#701634;--c2:#581328">
+                <img src="assets/equipe/JoaoAntonioGainoMinussi.jpeg" alt="João Antônio Gaino Minussi" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">JA</span>
+              </div>
+              <div class="membro-card__info"><h4>João Antônio Gaino Minussi</h4><p class="membro-card__role">Membro · Telecom</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#3d0c1c">
+                <img src="assets/equipe/VictorRayan.jpeg" alt="Victor Rayan" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">VR</span>
+              </div>
+              <div class="membro-card__info"><h4>Victor Rayan</h4><p class="membro-card__role">Membro · Telecom</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="equipe__area-group">
+          <div class="equipe__area-label">
+            <span class="equipe__area-tag equipe__area-tag--financeiro">Financeiro</span>
+          </div>
+          <div class="equipe__cards">
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#8B2042">
+                <img src="assets/equipe/DaviTrindadeNakamura.jpeg" alt="Davi Trindade Nakamura" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">DT</span>
+              </div>
+              <div class="membro-card__info"><h4>Davi Trindade Nakamura</h4><p class="membro-card__role">Membro · Financeiro</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#8B2042;--c2:#701634">
+                <img src="assets/equipe/GabrielPereiraSilva.jpeg" alt="Gabriel Pereira Silva" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">GP</span>
+              </div>
+              <div class="membro-card__info"><h4>Gabriel Pereira Silva</h4><p class="membro-card__role">Membro · Financeiro</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#3d0c1c;--c2:#581328">
+                <img src="assets/equipe/LucasQueirozSerraMenezes.jpeg" alt="Lucas Queiroz Serra Menezes" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">LQ</span>
+              </div>
+              <div class="membro-card__info"><h4>Lucas Queiroz Serra Menezes</h4><p class="membro-card__role">Membro · Financeiro</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#701634;--c2:#3d0c1c">
+                <img src="assets/equipe/JonatasXavierYamaguti.jpeg" alt="Jonatas Xavier Yamaguti" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">JX</span>
+              </div>
+              <div class="membro-card__info"><h4>Jonatas Xavier Yamaguti</h4><p class="membro-card__role">Membro · Financeiro</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="equipe__area-group">
+          <div class="equipe__area-label">
+            <span class="equipe__area-tag equipe__area-tag--rh">RH</span>
+          </div>
+          <div class="equipe__cards">
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#8B2042">
+                <img src="assets/equipe/SergioLuizBassetoJr.jpeg" alt="Sérgio Luiz Basseto Jr" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">SL</span>
+              </div>
+              <div class="membro-card__info"><h4>Sérgio Luiz Basseto Jr</h4><p class="membro-card__role">Membro · RH</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#8B2042;--c2:#3d0c1c">
+                <img src="assets/equipe/EwerthonRibeirodeLima.jpeg" alt="Ewerthon Ribeiro de Lima" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">ER</span>
+              </div>
+              <div class="membro-card__info"><h4>Ewerthon Ribeiro de Lima</h4><p class="membro-card__role">Membro · RH</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="equipe__area-group">
+          <div class="equipe__area-label">
+            <span class="equipe__area-tag equipe__area-tag--marketing">Marketing</span>
+          </div>
+          <div class="equipe__cards">
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#581328;--c2:#701634">
+                <img src="assets/equipe/VitoriaMolicoSalgado.jpeg" alt="Vitória Molico Salgado" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">VM</span>
+              </div>
+              <div class="membro-card__info"><h4>Vitória Molico Salgado</h4><p class="membro-card__role">Membro · Marketing</p></div>
+            </div>
+            <div class="membro-card" data-reveal>
+              <div class="membro-card__avatar" style="--c1:#3d0c1c;--c2:#8B2042">
+                <img src="assets/equipe/PedroGirottodeCamargo.jpeg" alt="Pedro Girotto de Camargo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="membro-card__avatar-fallback">PG</span>
+              </div>
+              <div class="membro-card__info"><h4>Pedro Girotto de Camargo</h4><p class="membro-card__role">Membro · Marketing</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="equipe__cta" data-reveal>
+        <p>Quer fazer parte da L&D Engenharia?</p>
+        <a href="#contato" class="btn btn--primary">Quero ser membro</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section class="contato" id="contato">
+    <div class="container">
+      <div class="contato__grid">
+        <div class="contato__intro">
+          <p class="label" data-reveal>Vamos conversar</p>
+          <h2 class="contato__title" data-reveal>Tem um projeto<br/>em mente?</h2>
+          <p class="contato__text" data-reveal>
+            Nos conte sobre seu desafio. Nossa equipe vai analisar e retornar com uma proposta técnica em até 3 dias úteis.
+          </p>
+        </div>
+        <div class="contato__form-wrap" data-reveal>
+          <form class="form" id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="form__hidden" aria-hidden="true">
+              <label>Não preencha isto: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div class="form__group">
+              <label class="form__label" for="nome">Nome completo</label>
+              <input class="form__input" type="text" id="nome" name="nome" placeholder="Seu nome" required />
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="email">E-mail</label>
+              <input class="form__input" type="email" id="email" name="email" placeholder="seu@email.com" required />
+            </div>
+            <div class="form__row">
+              <div class="form__group">
+                <label class="form__label" for="empresa">Empresa / Organização</label>
+                <input class="form__input" type="text" id="empresa" name="empresa" placeholder="Opcional" />
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="servico">Tipo de Serviço</label>
+                <select class="form__input form__select" id="servico" name="servico">
+                  <option value="">Selecione...</option>
+                  <option>Projetos Eletrônicos</option>
+                  <option>Telecomunicações</option>
+                  <option>Engenharia Aeronáutica</option>
+                  <option>Programação & IoT</option>
+                  <option>Consultoria Técnica</option>
+                  <option>P&D</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="mensagem">Conte-nos sobre o projeto</label>
+              <textarea class="form__input form__textarea" id="mensagem" name="mensagem" placeholder="Descreva seu desafio ou necessidade..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary btn--full">
+              <span class="btn-text">Enviar Mensagem</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <div class="form__success" id="form-success">
+              ✅ Mensagem enviada! Retornaremos em breve.
+            </div>
+          </form>
+        </div>
+        <div class="contato__details">
+          <div class="contato__info" data-reveal>
+            <div class="contato__info-item">
+              <span class="contato__info-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </span>
+              <span>Av. Profª Isette Corrêa Fontão, 505 — São João da Boa Vista, SP</span>
+            </div>
+            <div class="contato__info-item">
+              <span class="contato__info-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg>
+              </span>
+              <span>led.eng.024@gmail.com</span>
+            </div>
+            <div class="contato__info-item">
+              <span class="contato__info-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="9" y1="18" x2="15" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+              <span>(19) 99476-6208</span>
+            </div>
+          </div>
+          <div class="contato__social" data-reveal>
+            <a href="https://www.instagram.com/led_engenharia.unesp/" class="social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/ledengenhariaunesp/?viewAsMember=true" class="social-link" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 10V17M7 7V7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 17V13C11 11.343 12.343 10 14 10C15.657 10 17 11.343 17 13V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 10V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="assets/logosemfundobranca.png" alt="L&D Engenharia" class="footer__logo" />
+          <p>Empresa Júnior de Engenharia<br/>UNESP — São João da Boa Vista</p>
+        </div>
+        <div class="footer__links">
+          <h5>Navegação</h5>
+          <ul>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#projetos">Projetos</a></li>
+            <li><a href="#equipe">Equipe</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h5>Serviços</h5>
+          <ul>
+            <li><a href="#servicos">Projetos Eletrônicos</a></li>
+            <li><a href="#servicos">Telecomunicações</a></li>
+            <li><a href="#servicos">Aeronáutica</a></li>
+            <li><a href="#servicos">IoT & Software</a></li>
+          </ul>
+        </div>
+        <div class="footer__contact">
+          <h5>Contato</h5>
+          <p>led.eng.024@gmail.com</p>
+          <p>(19) 99476-6208</p>
+          <p>São João da Boa Vista, SP</p>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2025 L&D Engenharia · Empresa Júnior UNESP SJBV. Todos os direitos reservados.</p>
+        <p>developed by Fernando Marques</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
