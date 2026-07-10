@@ -15,33 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
   updateNav();
 
-  //  HAMBURGER MENU 
+  //  HAMBURGER MENU  (leve — só toggle de classe, animação toda no CSS)
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobile-menu');
   let menuOpen = false;
 
-  hamburger.addEventListener('click', () => {
-    menuOpen = !menuOpen;
-    mobileMenu.classList.toggle('open', menuOpen);
-    hamburger.setAttribute('aria-expanded', menuOpen);
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    const spans = hamburger.querySelectorAll('span');
-    if (menuOpen) {
-      spans[0].style.cssText = 'transform: rotate(45deg) translateY(7px)';
-      spans[1].style.cssText = 'opacity: 0';
-      spans[2].style.cssText = 'transform: rotate(-45deg) translateY(-7px)';
-    } else {
-      spans.forEach(s => s.style.cssText = '');
-    }
-  });
+  function setMenu(open) {
+    menuOpen = open;
+    mobileMenu.classList.toggle('open', open);
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+    document.body.classList.toggle('menu-open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  hamburger.addEventListener('click', () => setMenu(!menuOpen));
 
   document.querySelectorAll('.mobile-link').forEach(link => {
-    link.addEventListener('click', () => {
-      menuOpen = false;
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
-      hamburger.querySelectorAll('span').forEach(s => s.style.cssText = '');
-    });
+    link.addEventListener('click', () => setMenu(false));
   });
 
   //  SCROLL REVEAL 
@@ -265,7 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.3 });
     quoteObs.observe(quote);
   }
-//  EQUIPE TABS 
+
+  //  EQUIPE TABS 
   const tabs = document.querySelectorAll('.equipe__tab');
   const panels = document.querySelectorAll('.equipe__panel');
 
@@ -280,12 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const activePanel = document.querySelector(`[data-panel="${target}"]`);
       activePanel.classList.add('equipe__panel--active');
 
-      
       activePanel.querySelectorAll('[data-reveal]:not(.is-visible)').forEach((el, i) => {
         setTimeout(() => el.classList.add('is-visible'), i * 40);
       });
     });
   });
+
   console.log('%cL&D Engenharia 🚀', 'font-size:20px; font-weight:bold; color:#581328;');
   console.log('%cEmpresa Júnior · UNESP São João da Boa Vista', 'color:#7a5c64;');
 });
