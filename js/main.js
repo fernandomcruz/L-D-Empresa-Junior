@@ -7,7 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateNav() {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }
-  window.addEventListener('scroll', updateNav, { passive: true });
+  let navTicking = false;
+  window.addEventListener('scroll', () => {
+    if (navTicking) return;
+    navTicking = true;
+    requestAnimationFrame(() => { updateNav(); navTicking = false; });
+  }, { passive: true });
   updateNav();
 
   //  HAMBURGER MENU 
@@ -146,46 +151,75 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  //  PARALLAX BG TEXT 
+  //  PARALLAX BG TEXT (rAF-throttled, skipped on mobile/reduced-motion)
   const bgText = document.querySelector('.hero__bg-text');
-  if (bgText) {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  if (bgText && !prefersReduced && !isCoarse) {
+    let pTicking = false;
+    let lastY = 0;
+    const heroEl = document.getElementById('hero');
+    let heroVisible = true;
+    if (heroEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; }, { threshold: 0 }).observe(heroEl);
+    }
     window.addEventListener('scroll', () => {
-      bgText.style.transform = `translate(-50%, calc(-50% + ${window.scrollY * 0.25}px))`;
+      if (pTicking || !heroVisible) return;
+      pTicking = true;
+      lastY = window.scrollY;
+      requestAnimationFrame(() => {
+        bgText.style.transform = `translate3d(-50%, calc(-50% + ${lastY * 0.25}px), 0)`;
+        pTicking = false;
+      });
     }, { passive: true });
   }
 
-  //  TILT ON PROJETO CARDS 
-  document.querySelectorAll('.projeto-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const dx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-      const dy = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-      card.style.transition = 'transform 0.1s ease, box-shadow 0.4s';
-      card.style.borderRadius = '20px';
-      card.style.transform = `scale(1.02) perspective(600px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg)`;
+  //  TILT ON PROJETO CARDS (rAF-throttled, desktop only)
+  if (!isCoarse && !prefersReduced) {
+    document.querySelectorAll('.projeto-card').forEach(card => {
+      let tTicking = false, tDx = 0, tDy = 0;
+      card.addEventListener('mouseenter', () => { card.style.willChange = 'transform'; });
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        tDx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+        tDy = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+        if (tTicking) return;
+        tTicking = true;
+        requestAnimationFrame(() => {
+          card.style.transition = 'transform 0.12s ease, box-shadow 0.4s';
+          card.style.transform = `scale(1.02) perspective(600px) rotateY(${tDx * 4}deg) rotateX(${-tDy * 4}deg)`;
+          tTicking = false;
+        });
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s';
+        card.style.transform = '';
+        card.style.willChange = 'auto';
+      });
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s';
-      card.style.borderRadius = '20px';
-      card.style.transform = '';
-    });
-  });
+  }
 
-  //  TILT ON HERO LOGO 
+  //  TILT ON HERO LOGO (rAF-throttled, desktop only)
   const heroLogoTilt = document.querySelector('.hero__logo-tilt');
-  if (heroLogoTilt) {
+  if (heroLogoTilt && !isCoarse && !prefersReduced) {
+    let lTicking = false, lDx = 0, lDy = 0;
+    heroLogoTilt.addEventListener('mouseenter', () => { heroLogoTilt.style.willChange = 'transform'; });
     heroLogoTilt.addEventListener('mousemove', (e) => {
       const rect = heroLogoTilt.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) / (rect.width / 2);
-      const dy = (e.clientY - cy) / (rect.height / 2);
-      heroLogoTilt.style.transition = 'transform 0.08s ease';
-      heroLogoTilt.style.transform = `perspective(500px) rotateY(${dx * 18}deg) rotateX(${-dy * 18}deg) scale(1.07)`;
+      lDx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+      lDy = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+      if (lTicking) return;
+      lTicking = true;
+      requestAnimationFrame(() => {
+        heroLogoTilt.style.transition = 'transform 0.08s ease';
+        heroLogoTilt.style.transform = `perspective(500px) rotateY(${lDx * 18}deg) rotateX(${-lDy * 18}deg) scale(1.07)`;
+        lTicking = false;
+      });
     });
     heroLogoTilt.addEventListener('mouseleave', () => {
       heroLogoTilt.style.transition = 'transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)';
       heroLogoTilt.style.transform = '';
+      heroLogoTilt.style.willChange = 'auto';
     });
   }
 
