@@ -295,7 +295,7 @@ h1, h2, h3, h4, h5, p, span, a { overflow-wrap: break-word; word-break: break-wo
 .mobile-menu.open li:nth-child(4) .mobile-link { transition-delay: 0.23s; }
 .mobile-menu.open li:nth-child(5) .mobile-link { transition-delay: 0.28s; }
 
-/* MOBILE — mata o backdrop-filter caro quando menu está aberto/em telas pequenas */
+/* MOBILE */
 @media (max-width: 900px) {
   .nav.scrolled {
     backdrop-filter: none;
@@ -314,7 +314,6 @@ h1, h2, h3, h4, h5, p, span, a { overflow-wrap: break-word; word-break: break-wo
 }
 
 
-/* Respeita usuários com "reduzir movimento" ligado */
 @media (prefers-reduced-motion: reduce) {
   .mobile-menu,
   .mobile-menu .mobile-link,
@@ -1371,4 +1370,11 @@ h1, h2, h3, h4, h5, p, span, a { overflow-wrap: break-word; word-break: break-wo
 
   .nav__logo-text { font-size: 1rem; }
   .nav__logo-img { width: 2.2rem; height: 2.2rem; }
+}
+
+.developed {
+  border: 1px solid #ffffff;
+  padding: 1rem;
+  border-radius: 1rem;
+  color: #ffffff;
 }
