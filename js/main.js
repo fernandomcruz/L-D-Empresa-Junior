@@ -280,4 +280,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('%cL&D Engenharia 🚀', 'font-size:20px; font-weight:bold; color:#581328;');
   console.log('%cEmpresa Júnior · UNESP São João da Boa Vista', 'color:#7a5c64;');
+ //  DEVELOPED BY — LETTER SPIN 
+(function () {
+  const textEl = document.querySelector('.developed__text');
+  if (!textEl) return;
+
+  // percorre os nós de texto (inclusive dentro do <strong>) e envolve cada letra num span
+  function wrapLetters(node) {
+    node.childNodes.forEach(child => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const frag = document.createDocumentFragment();
+        [...child.textContent].forEach((char, i) => {
+          const span = document.createElement('span');
+          span.className = 'letter';
+          span.textContent = char === ' ' ? '\u00A0' : char;
+          frag.appendChild(span);
+        });
+        child.replaceWith(frag);
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        wrapLetters(child);
+      }
+    });
+  }
+  wrapLetters(textEl);
+
+  // delay progressivo pra cada letra (índice global, incluindo dentro do <strong>)
+  const letters = textEl.querySelectorAll('.letter');
+  letters.forEach((el, i) => {
+    el.style.setProperty('--i', i);
+  });
+})();
+
 });

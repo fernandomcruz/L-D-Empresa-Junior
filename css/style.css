@@ -310,7 +310,7 @@ h1, h2, h3, h4, h5, p, span, a { overflow-wrap: break-word; word-break: break-wo
   }
 }
 .nav__logo {
-  transition: opacity 0.3s ease-out;
+  transition: opacity 1s ease-out;
 }
 
 
@@ -1373,8 +1373,36 @@ h1, h2, h3, h4, h5, p, span, a { overflow-wrap: break-word; word-break: break-wo
 }
 
 .developed {
-  border: 1px solid #ffffff;
-  padding: 1rem;
-  border-radius: 1rem;
+  perspective: 4rem;
+}
+
+.developed__text {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  font-size: 1.1rem;
+}
+
+.developed__text strong {
+  display: inline-flex;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.letter {
+  display: inline-block;
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease-out), color 0.5s;
+  transition-delay: calc(var(--i) * 22ms);
+  will-change: transform;
+}
+
+.developed:hover .letter {
+  transform: rotateY(360deg);
   color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter { transition: none !important; }
+  .developed:hover .letter { transform: none; }
 }

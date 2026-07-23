@@ -609,7 +609,7 @@
           </p>
         </div>
         <div class="contato__form-wrap" data-reveal>
-          <form class="form" id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate netlify>
+          <form class="form" id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" netlify>
             <input type="hidden" name="form-name" value="contact" />
             <p class="form__hidden" aria-hidden="true">
               <label>Não preencha isto: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
@@ -625,7 +625,7 @@
             <div class="form__row">
               <div class="form__group">
                 <label class="form__label" for="empresa">Empresa / Organização</label>
-                <input class="form__input" type="text" id="empresa" name="empresa" placeholder="Opcional" />
+                <input class="form__input" type="text" id="empresa" name="empresa" placeholder="Opcional" required />
               </div>
               <div class="form__group">
                 <label class="form__label" for="servico">Tipo de Serviço</label>
@@ -723,7 +723,11 @@
       </div>
       <div class="footer__bottom">
         <p>© 2025 L&D Engenharia · Empresa Júnior UNESP SJBV. Todos os direitos reservados.</p>
-        <p class="developed">Developed by Fernando Marques</p>
+        <a href="https://fernandomcruz.netlify.app" target="_blank" rel="noopener" class="developed">
+          <span class="developed__bracket">&lt;</span>
+          <span class="developed__text">Developed by <strong>Fernando Marques</strong></span>
+          <span class="developed__bracket">/&gt;</span>
+        </a>
       </div>
     </div>
   </footer>
