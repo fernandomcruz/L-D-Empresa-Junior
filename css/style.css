@@ -672,7 +672,13 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   transition: opacity 0.9s 0.45s var(--ease-out), transform 1.1s 0.45s var(--ease-out);
 }
 .no-js .hero__logo-wrap { opacity: 1; transform: none; }
-.hero__logo-img { width: 176px; object-fit: contain; }
+/* `height: auto` is doing real work, not restating a default. The tag now
+   carries width/height attributes so the box is reserved before the file
+   arrives, and an HTML height attribute lands as a presentational
+   `height: 500px` that this rule's `width` cannot override on its own —
+   the frame would be 176 wide and 500 tall. `auto` hands the height back
+   to the aspect ratio, which is where it already was. */
+.hero__logo-img { width: 176px; height: auto; object-fit: contain; }
 
 @keyframes logoFloat {
   0%, 100% { transform: translate3d(0, 0, 0); }
@@ -767,6 +773,13 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   flex-shrink: 0;
 }
 @keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+
+/* Off the screen, off the clock. Set by the observer in js/main.js on the
+   two continuous loops — this one and the logo's float. A paused animation
+   is not advanced and not composited; both resume on the phase they were
+   left on, which is the phase the reader would have come back to. */
+.marquee__inner.is-paused,
+.hero__logo-float.is-paused { animation-play-state: paused; }
 
 /* ============================================================ SOBRE ==== */
 .sobre { padding-block: var(--section-y); background: var(--white); }
@@ -1746,8 +1759,9 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
     justify-content: normal;
     margin-top: 8px;
   }
-  .stat { padding: 20px 12px 30px 0; }
-  .stat + .stat { padding-left: 16px; }
+  /* the stats' padding is set by the centring block further down, which
+     shares this breakpoint and comes later — declaring it here as well
+     only produced two values the cascade immediately threw away */
   .stat__label { font-size: 0.6rem; letter-spacing: 0.12em; }
 
   .sobre__grid { grid-template-columns: minmax(0, 1fr); gap: 44px; }
@@ -1933,6 +1947,7 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   /* no loops at all */
   .marquee__inner,
   .hero__logo-float,
+  .pilar:hover .pilar__mark svg > *,
   .servico:hover .servico__icon svg > * { animation: none !important; }
 
   /* no pointer-driven movement */
@@ -1942,8 +1957,6 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   .pilar:hover::before { animation: none; opacity: 1; }
   .js [data-scrub] .w__i { transform: none !important; }
   .servico::before { transition: none; }
-  .pilar:hover .pilar__mark svg > *,
-  .servico:hover .servico__icon svg > * { animation: none !important; }
 
   .mobile-menu { transition: opacity 0.2s ease, visibility 0.2s; clip-path: none; }
   .mobile-menu.is-open { clip-path: none; }

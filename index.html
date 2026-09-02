@@ -23,10 +23,10 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/png" href="assets/logoicon.png">
-  <link rel="preload" as="image" href="assets/logosemfundo.png" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/logosemfundo.webp" fetchpriority="high">
 </head>
 <body>
   <a class="skip-link" href="#sobre">Pular para o conteúdo</a>
@@ -37,7 +37,7 @@
 
   <nav class="nav" id="nav">
     <a class="nav__logo" href="#hero" aria-label="L&amp;D Engenharia — início">
-      <img src="assets/logosemfundo.png" alt="" class="nav__logo-img" />
+      <img src="assets/logosemfundo.webp" alt="" class="nav__logo-img" width="160" height="160" decoding="async" />
       <span class="nav__logo-text">L<span class="amp">&amp;</span>D</span>
     </a>
     <ul class="nav__links">
@@ -96,7 +96,7 @@
         <div class="hero__logo-3d">
           <div class="hero__logo-float">
             <div class="hero__logo-wrap">
-              <img src="assets/logosemfundobranca.png" alt="" class="hero__logo-img" />
+              <img src="assets/logosemfundobranca.webp" alt="" class="hero__logo-img" width="500" height="500" decoding="async" />
             </div>
           </div>
         </div>
@@ -239,7 +239,7 @@
         <div class="projeto-card projeto-card--large" data-reveal data-tilt>
           <div class="projeto-card__inner">
             <div class="projeto-card__bg projeto-card__bg--1">
-              <img src="assets/projeto-dashboard.png" alt="Dashboard de pesquisa eleitoral desenvolvido em Power BI" class="projeto-card__img" loading="lazy" decoding="async">
+              <img src="assets/projeto-dashboard.webp" alt="Dashboard de pesquisa eleitoral desenvolvido em Power BI" class="projeto-card__img" width="1558" height="874" loading="lazy" decoding="async">
             </div>
             <div class="projeto-card__content">
               <span class="projeto-card__tag">Análise de Dados</span>
@@ -252,7 +252,7 @@
         <div class="projeto-card" data-reveal data-tilt>
           <div class="projeto-card__inner">
             <div class="projeto-card__bg projeto-card__bg--2">
-              <img src="assets/projeto-materiais.jpeg" alt="Reestruturação do estoque de materiais da Fer Alvarez" class="projeto-card__img" loading="lazy" decoding="async">
+              <img src="assets/projeto-materiais.webp" alt="Reestruturação do estoque de materiais da Fer Alvarez" class="projeto-card__img" width="1400" height="1050" loading="lazy" decoding="async">
             </div>
             <div class="projeto-card__content">
               <span class="projeto-card__tag">Consultoria Técnica</span>
@@ -278,6 +278,18 @@
   </section>
 
   <!-- EQUIPE -->
+  <!-- Membros sem foto: o cartão mostra as iniciais, que é o estado final que
+       a página já exibia. Para dar foto a um deles, salve o arquivo como
+       assets/equipe/<Nome>.webp (quadrado, 256px) e devolva a tag dentro do
+       .membro__avatar correspondente:
+         <img src="assets/equipe/<Nome>.webp" alt="" width="256" height="256"
+              loading="lazy" decoding="async" onerror="this.remove()">
+       Aguardando foto: Maria Clara Svetlauskis, Anna Cláudia Piai Groppo,
+       Pedro Henrique Batagin Fontolan, João Paulo Soares Chanfrin, Guilherme
+       Figueiredo Buiochi, Gabriel Pereira Silva, Henrique Brito de Mattos,
+       Rafael Menezes, João Vitor Cunha Marconi, Gabriel Kawanaka Rubio, João
+       Antônio Gaino Minussi, Sérgio Luiz Basseto Jr, Vitória Molico Salgado,
+       Pedro Girotto de Camargo. -->
   <section class="equipe" id="equipe">
     <div class="container">
       <div class="section-head">
@@ -296,17 +308,17 @@
         <div class="equipe__panel is-active" id="panel-executiva" role="tabpanel" aria-labelledby="tab-executiva" data-panel="executiva">
           <div class="equipe__leads">
         <article class="membro membro--lead" data-reveal style="--i:0">
-          <span class="membro__avatar membro__avatar--lg" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/MariaClaraSvetlauskis.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">MC</span></span>
+          <span class="membro__avatar membro__avatar--lg" style="--c1:#581328;--c2:#8B2042"><span class="membro__initials">MC</span></span>
           <h4 class="membro__name">Maria Clara Svetlauskis</h4>
           <p class="membro__role">Presidência</p>
         </article>
         <article class="membro membro--lead" data-reveal style="--i:1">
-          <span class="membro__avatar membro__avatar--lg" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/AnnaClaudiaPiaiGroppo.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">AC</span></span>
+          <span class="membro__avatar membro__avatar--lg" style="--c1:#701634;--c2:#3d0c1c"><span class="membro__initials">AC</span></span>
           <h4 class="membro__name">Anna Cláudia Piai Groppo</h4>
           <p class="membro__role">Vice-presidência</p>
         </article>
         <article class="membro membro--lead" data-reveal style="--i:2">
-          <span class="membro__avatar membro__avatar--lg" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/PedroHenriqueBataginFontolan.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">PH</span></span>
+          <span class="membro__avatar membro__avatar--lg" style="--c1:#3d0c1c;--c2:#701634"><span class="membro__initials">PH</span></span>
           <h4 class="membro__name">Pedro Henrique Batagin Fontolan</h4>
           <p class="membro__role">Diretoria executiva</p>
         </article>
@@ -316,23 +328,23 @@
         <div class="equipe__panel" id="panel-diretoria" role="tabpanel" aria-labelledby="tab-diretoria" data-panel="diretoria" hidden>
           <div class="equipe__dirs">
         <article class="membro membro--dir" data-reveal style="--i:0">
-          <span class="membro__avatar membro__avatar--md" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/MatheusSemolinAlvesFarias.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">MS</span></span>
+          <span class="membro__avatar membro__avatar--md" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/MatheusSemolinAlvesFarias.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">MS</span></span>
           <span class="membro__body"><h4 class="membro__name">Matheus Semolin Alves Farias</h4><p class="membro__role">Aeronáutica</p></span>
         </article>
         <article class="membro membro--dir" data-reveal style="--i:1">
-          <span class="membro__avatar membro__avatar--md" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/JoaoPauloSoaresChanfrin.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">JP</span></span>
+          <span class="membro__avatar membro__avatar--md" style="--c1:#701634;--c2:#3d0c1c"><span class="membro__initials">JP</span></span>
           <span class="membro__body"><h4 class="membro__name">João Paulo Soares Chanfrin</h4><p class="membro__role">Telecomunicações</p></span>
         </article>
         <article class="membro membro--dir" data-reveal style="--i:2">
-          <span class="membro__avatar membro__avatar--md" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/GuilhermeFigueiredoBuiochi.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GF</span></span>
+          <span class="membro__avatar membro__avatar--md" style="--c1:#3d0c1c;--c2:#701634"><span class="membro__initials">GF</span></span>
           <span class="membro__body"><h4 class="membro__name">Guilherme Figueiredo Buiochi</h4><p class="membro__role">Financeiro</p></span>
         </article>
         <article class="membro membro--dir" data-reveal style="--i:3">
-          <span class="membro__avatar membro__avatar--md" style="--c1:#8B2042;--c2:#581328"><img src="assets/equipe/GiovanaNunesdeOliveira.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GO</span></span>
+          <span class="membro__avatar membro__avatar--md" style="--c1:#8B2042;--c2:#581328"><img src="assets/equipe/GiovanaNunesdeOliveira.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GO</span></span>
           <span class="membro__body"><h4 class="membro__name">Giovana Nunes de Oliveira</h4><p class="membro__role">Recursos Humanos</p></span>
         </article>
         <article class="membro membro--dir" data-reveal style="--i:4">
-          <span class="membro__avatar membro__avatar--md" style="--c1:#581328;--c2:#3d0c1c"><img src="assets/equipe/PauloCamargoBuenoFilho.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">PC</span></span>
+          <span class="membro__avatar membro__avatar--md" style="--c1:#581328;--c2:#3d0c1c"><img src="assets/equipe/PauloCamargoBuenoFilho.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">PC</span></span>
           <span class="membro__body"><h4 class="membro__name">Paulo Camargo Bueno Filho</h4><p class="membro__role">Marketing</p></span>
         </article>
           </div>
@@ -346,14 +358,14 @@
               <span class="area__count">08</span>
             </div>
             <div class="area__grid">
-            <article class="membro" style="--i:0"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/GabrielPereiraSilva.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GP</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Pereira Silva</h4></span></article>
-            <article class="membro" style="--i:1"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/HenriqueBritodeMattos.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">HB</span></span><span class="membro__body"><h4 class="membro__name">Henrique Brito de Mattos</h4></span></article>
-            <article class="membro" style="--i:2"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/PedroBondezan.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">PB</span></span><span class="membro__body"><h4 class="membro__name">Pedro Bondezan</h4></span></article>
-            <article class="membro" style="--i:3"><span class="membro__avatar" style="--c1:#8B2042;--c2:#581328"><img src="assets/equipe/RafaelMenezes.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">RM</span></span><span class="membro__body"><h4 class="membro__name">Rafael Menezes</h4></span></article>
-            <article class="membro" style="--i:4"><span class="membro__avatar" style="--c1:#581328;--c2:#3d0c1c"><img src="assets/equipe/JoaoVitorCunhaMarconi.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">JV</span></span><span class="membro__body"><h4 class="membro__name">João Vitor Cunha Marconi</h4></span></article>
-            <article class="membro" style="--i:5"><span class="membro__avatar" style="--c1:#701634;--c2:#8B2042"><img src="assets/equipe/LuisAugustoLimaCruz.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">LA</span></span><span class="membro__body"><h4 class="membro__name">Luis Augusto Lima Cruz</h4></span></article>
-            <article class="membro" style="--i:6"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/MariaEduardaSimplicio.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">ME</span></span><span class="membro__body"><h4 class="membro__name">Maria Eduarda Simplicio</h4></span></article>
-            <article class="membro" style="--i:7"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/GabrielDiogodaSilva.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GD</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Diogo da Silva</h4></span></article>
+            <article class="membro" style="--i:0"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><span class="membro__initials">GP</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Pereira Silva</h4></span></article>
+            <article class="membro" style="--i:1"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><span class="membro__initials">HB</span></span><span class="membro__body"><h4 class="membro__name">Henrique Brito de Mattos</h4></span></article>
+            <article class="membro" style="--i:2"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/PedroBondezan.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">PB</span></span><span class="membro__body"><h4 class="membro__name">Pedro Bondezan</h4></span></article>
+            <article class="membro" style="--i:3"><span class="membro__avatar" style="--c1:#8B2042;--c2:#581328"><span class="membro__initials">RM</span></span><span class="membro__body"><h4 class="membro__name">Rafael Menezes</h4></span></article>
+            <article class="membro" style="--i:4"><span class="membro__avatar" style="--c1:#581328;--c2:#3d0c1c"><span class="membro__initials">JV</span></span><span class="membro__body"><h4 class="membro__name">João Vitor Cunha Marconi</h4></span></article>
+            <article class="membro" style="--i:5"><span class="membro__avatar" style="--c1:#701634;--c2:#8B2042"><img src="assets/equipe/LuisAugustoLimaCruz.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">LA</span></span><span class="membro__body"><h4 class="membro__name">Luis Augusto Lima Cruz</h4></span></article>
+            <article class="membro" style="--i:6"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/MariaEduardaSimplicio.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">ME</span></span><span class="membro__body"><h4 class="membro__name">Maria Eduarda Simplicio</h4></span></article>
+            <article class="membro" style="--i:7"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/GabrielDiogodaSilva.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GD</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Diogo da Silva</h4></span></article>
             </div>
           </div>
           <div class="area">
@@ -363,11 +375,11 @@
               <span class="area__count">05</span>
             </div>
             <div class="area__grid">
-            <article class="membro" style="--i:8"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/FernandoMarquesDaCruz.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">FM</span></span><span class="membro__body"><h4 class="membro__name">Fernando Marques da Cruz</h4></span></article>
-            <article class="membro" style="--i:9"><span class="membro__avatar" style="--c1:#8B2042;--c2:#581328"><img src="assets/equipe/GabrielKawanakaRubio.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GK</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Kawanaka Rubio</h4></span></article>
-            <article class="membro" style="--i:10"><span class="membro__avatar" style="--c1:#581328;--c2:#3d0c1c"><img src="assets/equipe/ThiagoMendesSantos.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">TS</span></span><span class="membro__body"><h4 class="membro__name">Thiago Mendes Santos</h4></span></article>
-            <article class="membro" style="--i:11"><span class="membro__avatar" style="--c1:#701634;--c2:#8B2042"><img src="assets/equipe/JoaoAntonioGainoMinussi.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">JA</span></span><span class="membro__body"><h4 class="membro__name">João Antônio Gaino Minussi</h4></span></article>
-            <article class="membro" style="--i:12"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/VictorRayan.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">VR</span></span><span class="membro__body"><h4 class="membro__name">Victor Rayan</h4></span></article>
+            <article class="membro" style="--i:8"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/FernandoMarquesDaCruz.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">FM</span></span><span class="membro__body"><h4 class="membro__name">Fernando Marques da Cruz</h4></span></article>
+            <article class="membro" style="--i:9"><span class="membro__avatar" style="--c1:#8B2042;--c2:#581328"><span class="membro__initials">GK</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Kawanaka Rubio</h4></span></article>
+            <article class="membro" style="--i:10"><span class="membro__avatar" style="--c1:#581328;--c2:#3d0c1c"><img src="assets/equipe/ThiagoMendesSantos.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">TS</span></span><span class="membro__body"><h4 class="membro__name">Thiago Mendes Santos</h4></span></article>
+            <article class="membro" style="--i:11"><span class="membro__avatar" style="--c1:#701634;--c2:#8B2042"><span class="membro__initials">JA</span></span><span class="membro__body"><h4 class="membro__name">João Antônio Gaino Minussi</h4></span></article>
+            <article class="membro" style="--i:12"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/VictorRayan.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">VR</span></span><span class="membro__body"><h4 class="membro__name">Victor Rayan</h4></span></article>
             </div>
           </div>
           <div class="area">
@@ -377,10 +389,10 @@
               <span class="area__count">04</span>
             </div>
             <div class="area__grid">
-            <article class="membro" style="--i:13"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/DaviTrindadeNakamura.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">DT</span></span><span class="membro__body"><h4 class="membro__name">Davi Trindade Nakamura</h4></span></article>
-            <article class="membro" style="--i:14"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/GabrielPereiraSilva.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">GP</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Pereira Silva</h4></span></article>
-            <article class="membro" style="--i:15"><span class="membro__avatar" style="--c1:#8B2042;--c2:#581328"><img src="assets/equipe/LucasQueirozSerraMenezes.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">LQ</span></span><span class="membro__body"><h4 class="membro__name">Lucas Queiroz Serra Menezes</h4></span></article>
-            <article class="membro" style="--i:16"><span class="membro__avatar" style="--c1:#581328;--c2:#3d0c1c"><img src="assets/equipe/JonatasXavierYamaguti.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">JX</span></span><span class="membro__body"><h4 class="membro__name">Jonatas Xavier Yamaguti</h4></span></article>
+            <article class="membro" style="--i:13"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/DaviTrindadeNakamura.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">DT</span></span><span class="membro__body"><h4 class="membro__name">Davi Trindade Nakamura</h4></span></article>
+            <article class="membro" style="--i:14"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><span class="membro__initials">GP</span></span><span class="membro__body"><h4 class="membro__name">Gabriel Pereira Silva</h4></span></article>
+            <article class="membro" style="--i:15"><span class="membro__avatar" style="--c1:#8B2042;--c2:#581328"><img src="assets/equipe/LucasQueirozSerraMenezes.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">LQ</span></span><span class="membro__body"><h4 class="membro__name">Lucas Queiroz Serra Menezes</h4></span></article>
+            <article class="membro" style="--i:16"><span class="membro__avatar" style="--c1:#581328;--c2:#3d0c1c"><img src="assets/equipe/JonatasXavierYamaguti.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">JX</span></span><span class="membro__body"><h4 class="membro__name">Jonatas Xavier Yamaguti</h4></span></article>
             </div>
           </div>
           <div class="area">
@@ -390,8 +402,8 @@
               <span class="area__count">02</span>
             </div>
             <div class="area__grid">
-            <article class="membro" style="--i:17"><span class="membro__avatar" style="--c1:#701634;--c2:#8B2042"><img src="assets/equipe/SergioLuizBassetoJr.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">SL</span></span><span class="membro__body"><h4 class="membro__name">Sérgio Luiz Basseto Jr</h4></span></article>
-            <article class="membro" style="--i:18"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/EwerthonRibeirodeLima.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">ER</span></span><span class="membro__body"><h4 class="membro__name">Ewerthon Ribeiro de Lima</h4></span></article>
+            <article class="membro" style="--i:17"><span class="membro__avatar" style="--c1:#701634;--c2:#8B2042"><span class="membro__initials">SL</span></span><span class="membro__body"><h4 class="membro__name">Sérgio Luiz Basseto Jr</h4></span></article>
+            <article class="membro" style="--i:18"><span class="membro__avatar" style="--c1:#581328;--c2:#8B2042"><img src="assets/equipe/EwerthonRibeirodeLima.webp" alt="" width="256" height="256" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">ER</span></span><span class="membro__body"><h4 class="membro__name">Ewerthon Ribeiro de Lima</h4></span></article>
             </div>
           </div>
           <div class="area">
@@ -401,8 +413,8 @@
               <span class="area__count">02</span>
             </div>
             <div class="area__grid">
-            <article class="membro" style="--i:19"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><img src="assets/equipe/VitoriaMolicoSalgado.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">VM</span></span><span class="membro__body"><h4 class="membro__name">Vitória Molico Salgado</h4></span></article>
-            <article class="membro" style="--i:20"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><img src="assets/equipe/PedroGirottodeCamargo.jpeg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="membro__initials">PG</span></span><span class="membro__body"><h4 class="membro__name">Pedro Girotto de Camargo</h4></span></article>
+            <article class="membro" style="--i:19"><span class="membro__avatar" style="--c1:#701634;--c2:#3d0c1c"><span class="membro__initials">VM</span></span><span class="membro__body"><h4 class="membro__name">Vitória Molico Salgado</h4></span></article>
+            <article class="membro" style="--i:20"><span class="membro__avatar" style="--c1:#3d0c1c;--c2:#701634"><span class="membro__initials">PG</span></span><span class="membro__body"><h4 class="membro__name">Pedro Girotto de Camargo</h4></span></article>
             </div>
           </div>
         </div>
@@ -509,7 +521,7 @@
     <div class="container">
       <div class="footer__grid">
         <div class="footer__brand">
-          <img src="assets/logosemfundobranca.png" alt="L&amp;D Engenharia" class="footer__logo" loading="lazy" decoding="async">
+          <img src="assets/logosemfundobranca.webp" alt="L&amp;D Engenharia" class="footer__logo" width="500" height="500" loading="lazy" decoding="async">
           <p>Empresa Júnior de Engenharia<br/>UNESP&nbsp;— São João da Boa Vista</p>
         </div>
         <div class="footer__links">
@@ -553,7 +565,6 @@
     </div>
   </footer>
 
-  <script src="js/assinatura.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

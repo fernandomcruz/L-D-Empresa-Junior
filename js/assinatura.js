@@ -31,11 +31,31 @@ const SIGNATURE_DATA = {"color":"#D4FB06","bbox":[40.2,74.0,1901.8,884.0],"strok
   'use strict';
 
   const CONFIG = {
-    totalDuration: 2400,     // ms — duração total da escrita (menor = traço mais rápido)
-    leadIn: 110,             // ms — instante antes de a caneta encostar
-    liftInGroup: 70,         // ms — caneta no ar entre movimentos do mesmo grupo
-    liftBetweenGroups: 110,  // ms — caneta no ar entre grupos
-    tailHold: 60,            // ms — respiro depois do último traço
+    /* A escrita inteira, do primeiro toque ao último respiro. Eram 2400ms na
+       hero do portfólio, onde a assinatura é a primeira coisa na tela e pode
+       se dar ao luxo de demorar. Num rodapé ela disputa com a rolagem: quem
+       chega ali já está de saída, então ela corre. */
+    totalDuration: 1500,     // ms — duração total da escrita (menor = mais rápido)
+
+    /* AS PAUSAS SÃO FRAÇÕES DA DURAÇÃO, E NÃO MILISSEGUNDOS FIXOS.
+
+       Elas eram fixas (110/70/110/60), e o motor DESCONTA as pausas do
+       orçamento de tinta: `drawBudget = totalDuration - pauses - tailHold`.
+       Com valores fixos, baixar `totalDuration` não acelerava o traço na
+       proporção esperada — as pausas ficavam do mesmo tamanho e passavam a
+       comer uma fatia cada vez maior do total. A caneta ia ficando mais
+       tempo no ar e menos escrevendo, e abaixo de ~460ms o orçamento virava
+       negativo e a escrita quebrava.
+
+       Em fração, o ritmo entre traço e ar é o mesmo em qualquer duração:
+       mudar `totalDuration` acima é a única coisa a fazer para mudar a
+       velocidade. Os valores abaixo são exatamente as proporções originais
+       (110/2400, 70/2400, 110/2400, 60/2400), então o compasso da escrita
+       continua sendo o que foi extraído da mão. */
+    leadIn: 0.046,           // × duração — antes de a caneta encostar
+    liftInGroup: 0.029,      // × duração — caneta no ar dentro do mesmo grupo
+    liftBetweenGroups: 0.046,// × duração — caneta no ar entre grupos
+    tailHold: 0.025,         // × duração — respiro depois do último traço
 
     curvWindow: 4,           // amostras usadas para medir a curvatura local
     minRadius: 7,            // px de arte — abaixo disso é considerado "bico"
@@ -190,25 +210,32 @@ const SIGNATURE_DATA = {"color":"#D4FB06","bbox":[40.2,74.0,1901.8,884.0],"strok
 
     strokes = DATA.strokes.map(buildStroke);
 
-    /* --- linha do tempo: normaliza para a duração total e insere as pausas -- */
-    let pauses = CONFIG.leadIn;
+    /* --- linha do tempo: normaliza para a duração total e insere as pausas --
+       As pausas do CONFIG são frações; viram milissegundos aqui, uma vez só. */
+    const D = CONFIG.totalDuration;
+    const leadIn = CONFIG.leadIn * D;
+    const liftIn = CONFIG.liftInGroup * D;
+    const liftBetween = CONFIG.liftBetweenGroups * D;
+    const tailHold = CONFIG.tailHold * D;
+
+    let pauses = leadIn;
     for (let i = 1; i < strokes.length; i++) {
-      pauses += strokes[i].g === strokes[i - 1].g ? CONFIG.liftInGroup : CONFIG.liftBetweenGroups;
+      pauses += strokes[i].g === strokes[i - 1].g ? liftIn : liftBetween;
     }
-    const drawBudget = CONFIG.totalDuration - pauses - CONFIG.tailHold;
+    const drawBudget = D - pauses - tailHold;
     const naturalTotal = strokes.reduce((a, st) => a + st.natural, 0);
     const scale = drawBudget / naturalTotal;   // um único fator: preserva o ritmo relativo
 
-    let cursorTime = CONFIG.leadIn;
+    let cursorTime = leadIn;
     strokes.forEach((st, i) => {
-      if (i > 0) cursorTime += st.g === strokes[i - 1].g ? CONFIG.liftInGroup : CONFIG.liftBetweenGroups;
+      if (i > 0) cursorTime += st.g === strokes[i - 1].g ? liftIn : liftBetween;
       st.t0 = cursorTime;
       for (let j = 0; j < st.n; j++) st.t[j] *= scale;
       st.duration = st.t[st.n - 1];
       st.t1 = st.t0 + st.duration;
       cursorTime = st.t1;
     });
-    TOTAL = cursorTime + CONFIG.tailHold;
+    TOTAL = cursorTime + tailHold;
   }
 
   /* Tempo ocioso, com teto: o `timeout` garante que o preparo não fique
@@ -524,12 +551,20 @@ const SIGNATURE_DATA = {"color":"#D4FB06","bbox":[40.2,74.0,1901.8,884.0],"strok
     }, 80);
   }
 
-  window.addEventListener('resize', onResize);
-  window.addEventListener('orientationchange', onResize);
-
-  // o flex da hero pode resolver a altura depois do load (fontes, imagens...)
+  /* Três fontes chamavam o mesmo `onResize`: o `resize` da janela, o
+     `orientationchange` e o ResizeObserver da caixa. As duas primeiras são
+     redundantes com a terceira — a largura do `.assinatura-wrap` é um
+     `clamp()` em vw, então toda mudança de janela que importa aqui já chega
+     como mudança de caixa, e a que não muda a caixa é justamente a que o
+     próprio `onResize` descarta pela tolerância de 1px. Onde o observer
+     existe (todo navegador que roda esta página), ele basta; os listeners
+     de janela ficam só como reserva. */
   if ('ResizeObserver' in window) {
+    // o flex da hero pode resolver a altura depois do load (fontes, imagens...)
     new ResizeObserver(onResize).observe(stage);
+  } else {
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
   }
 
   /* --- início: espera a caixa existir e escreve, uma vez só ---------------- */

@@ -34,8 +34,37 @@
   let scrollQueued = false;
   let resizeQueued = false;
 
-  const flushScroll = () => { scrollQueued = false; scrollSubs.forEach((fn) => fn()); };
-  const flushResize = () => { resizeQueued = false; resizeSubs.forEach((fn) => fn()); };
+  /* ---------------------------------------------- the two measurements
+     Viewport height and scrollable distance are read from layout, so
+     reading them AFTER a subscriber has written a style forces the browser
+     to lay the page out again on the spot — every scroll frame, for as
+     long as the page is being scrolled. They are read once here, at the
+     top of the frame where layout is still clean from the last paint, and
+     handed to the subscribers as plain numbers.
+
+     `dirty` is set by anything that can change either one: the viewport
+     resizing, and the document growing or shrinking (the equipe stage
+     animating its height, a panel swapping, the menu pinning the body). */
+  let viewH = window.innerHeight;
+  let docMax = 0;
+  let metricsDirty = true;
+
+  const readMetrics = () => {
+    metricsDirty = false;
+    viewH = window.innerHeight;
+    docMax = document.documentElement.scrollHeight - viewH;
+  };
+
+  const flushScroll = () => {
+    scrollQueued = false;
+    if (metricsDirty) readMetrics();
+    for (let i = 0; i < scrollSubs.length; i++) scrollSubs[i]();
+  };
+  const flushResize = () => {
+    resizeQueued = false;
+    metricsDirty = true;
+    for (let i = 0; i < resizeSubs.length; i++) resizeSubs[i]();
+  };
 
   const queueScroll = () => {
     if (scrollQueued) return;
@@ -48,11 +77,23 @@
     requestAnimationFrame(flushResize);
   };
 
-  const onScroll = (fn) => { scrollSubs.push(fn); fn(); };
+  /* Subscribing no longer runs the handler on the spot: three separate
+     first runs meant three separate layout reads while the script was
+     still evaluating. They all run once together at the end of the file
+     instead, which is the same starting state in one pass. */
+  const onScroll = (fn) => { scrollSubs.push(fn); };
   const onResize = (fn) => { resizeSubs.push(fn); };
 
   window.addEventListener('scroll', queueScroll, { passive: true });
   window.addEventListener('resize', queueResize, { passive: true });
+
+  /* The document's height changes without the window ever resizing — the
+     equipe stage animates its own, reveals settle, the menu pins the body.
+     Marking the metrics stale is all this does; the next scroll frame
+     re-reads them at a moment when reading is free. */
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => { metricsDirty = true; }).observe(document.body);
+  }
   /* iOS reports the pre-rotation metrics on orientationchange and does not
      always follow it with a resize, so measure once now and once after the
      new viewport has settled. */
@@ -102,11 +143,16 @@
   const revealTargets = $$('[data-reveal], [data-split]')
     .filter((el) => !el.hasAttribute('data-scrub'));
   if ('IntersectionObserver' in window) {
+    /* Every target is a one-shot, so the observer has a finite life: once
+       the last one has revealed there is nothing left to watch and it can
+       go rather than sit registered for the rest of the session. */
+    let pending = revealTargets.length;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('is-in');
         io.unobserve(entry.target);
+        if (--pending === 0) io.disconnect();
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
     revealTargets.forEach((el) => io.observe(el));
@@ -117,7 +163,12 @@
   /* ======================================== 2b · SCROLL-SCRUBBED TEXT ==
      The words are not triggered — their position IS the scroll position, so
      they rise on the way down and sink again on the way back up. */
-  const scrubbed = $$('[data-scrub]').map((el) => ({ el, words: $$('.w__i', el) }));
+  const scrubbed = $$('[data-scrub]').map((el) => {
+    const words = $$('.w__i', el);
+    /* what was last written to each word, so a word that has not actually
+       moved this frame is not handed the same string again */
+    return { el, words, sent: new Array(words.length), lastP: -1 };
+  });
 
   if (scrubbed.length) {
     if (reduced.matches) {
@@ -125,21 +176,35 @@
     } else {
       const OVERLAP = 6; /* how many words are mid-flight at any moment */
       onScroll(() => {
-        const vh = window.innerHeight;
-        scrubbed.forEach(({ el, words }) => {
-          const r = el.getBoundingClientRect();
-          if (r.bottom < -240 || r.top > vh + 240) return;
-          const from = vh * 0.92;
-          const to   = vh * 0.30;
+        for (let s = 0; s < scrubbed.length; s++) {
+          const it = scrubbed[s];
+          const r = it.el.getBoundingClientRect();
+          if (r.bottom < -240 || r.top > viewH + 240) continue;
+          const from = viewH * 0.92;
+          const to   = viewH * 0.30;
           let p = (from - r.top) / (from - to);
           p = p < 0 ? 0 : p > 1 ? 1 : p;
+          /* Above the band and below it the quote is fully settled, so the
+             clamp holds p at the same value across long stretches of
+             scrolling. Nothing has moved: skip the whole block. */
+          if (p === it.lastP) continue;
+          it.lastP = p;
+
+          const words = it.words, sent = it.sent;
           const span = words.length + OVERLAP;
-          words.forEach((w, i) => {
+          for (let i = 0; i < words.length; i++) {
             let wp = (p * span - i) / OVERLAP;
             wp = wp < 0 ? 0 : wp > 1 ? 1 : wp;
-            w.style.transform = `translate3d(0, ${((1 - wp) * 118).toFixed(2)}%, 0)`;
-          });
-        });
+            /* Only six words are in flight at a time; the ones already
+               home and the ones still waiting resolve to the identical
+               transform frame after frame. Writing it again would
+               invalidate their style for nothing. */
+            const t = `translate3d(0, ${((1 - wp) * 118).toFixed(2)}%, 0)`;
+            if (sent[i] === t) continue;
+            sent[i] = t;
+            words[i].style.transform = t;
+          }
+        }
       });
     }
   }
@@ -175,11 +240,13 @@
 
   const counters = $$('[data-count]');
   if (counters.length && 'IntersectionObserver' in window) {
+    let left = counters.length;
     const co = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         animateCount(entry.target, parseInt(entry.target.dataset.count, 10));
         co.unobserve(entry.target);
+        if (--left === 0) co.disconnect();
       });
     }, { threshold: 0.6 });
     counters.forEach((el) => co.observe(el));
@@ -192,16 +259,18 @@
   const progress = $('#scroll-progress');
   const progressFill = $('#scroll-progress-fill');
   let lastY = window.scrollY;
+  let lastP = '';
 
   onScroll(() => {
     const y = window.scrollY;
 
     nav.classList.toggle('is-stuck', y > 24);
 
-    /* scroll progress across the whole document */
+    /* scroll progress across the whole document — off the cached metrics,
+       so the bar never costs a layout of its own */
     if (progressFill) {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      progressFill.style.setProperty('--p', max > 0 ? (y / max).toFixed(4) : 0);
+      const p = docMax > 0 ? (y / docMax).toFixed(4) : '0';
+      if (p !== lastP) { lastP = p; progressFill.style.setProperty('--p', p); }
     }
 
     /* give the page back to the reader on the way down */
@@ -275,7 +344,12 @@
 
   if (burger && menu) {
     burger.addEventListener('click', () => setMenu(!menuOpen));
-    $$('.mobile-link', menu).forEach((l) => l.addEventListener('click', () => setMenu(false)));
+    /* one listener on the panel instead of one per row — and still on an
+       ancestor closer than the document, so it runs before the anchor
+       handler below, exactly as five separate listeners did */
+    menu.addEventListener('click', (e) => {
+      if (e.target.closest('.mobile-link')) setMenu(false);
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && menuOpen) { setMenu(false); burger.focus(); }
     });
@@ -286,20 +360,24 @@
   }
 
   /* ========================================= 7 · ANCHOR SCROLLING ==== */
-  $$('a[href^="#"]').forEach((a) => {
-    a.addEventListener('click', (e) => {
-      const id = a.getAttribute('href');
-      if (id.length < 2) return;
-      const target = document.querySelector(id);
-      if (!target) return;
-      e.preventDefault();
-      const navH = nav ? nav.offsetHeight : 0;
-      window.scrollTo({
-        top: target.getBoundingClientRect().top + window.scrollY - navH - 8,
-        behavior: reduced.matches ? 'auto' : 'smooth'
-      });
-      history.replaceState(null, '', id);
+  /* Delegated: the page carries seventeen in-page anchors — nav, menu,
+     hero buttons, six service links, two footer lists — and they all want
+     the same handler. One listener on the document does the work of
+     seventeen, and picks up any anchor added later for free. */
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href');
+    if (id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const navH = nav ? nav.offsetHeight : 0;
+    window.scrollTo({
+      top: target.getBoundingClientRect().top + window.scrollY - navH - 8,
+      behavior: reduced.matches ? 'auto' : 'smooth'
     });
+    history.replaceState(null, '', id);
   });
 
   /* ============================================== 8 · EQUIPE TABS ==== */
@@ -320,10 +398,32 @@
   if (tabs.length && stage) {
     const activeTab = () => tabs.find((t) => t.classList.contains('is-active'));
 
+    /* The swap leaves a timer behind that puts the stage back on automatic
+       height 560ms later. A second switch inside that window used to let
+       the first timer land in the middle of the second transition and wipe
+       the height it was animating to — the stage would snap. Settling the
+       pending swap before starting a new one keeps the two apart, and
+       drops the stale timeouts instead of letting them stack. */
+    let swapTimer = 0;
+    let staggerTimers = [];
+
+    const settle = () => {
+      if (swapTimer) { clearTimeout(swapTimer); swapTimer = 0; }
+      staggerTimers.forEach(clearTimeout);
+      staggerTimers = [];
+      panels.forEach((p) => {
+        if (!p.classList.contains('is-leaving')) return;
+        p.classList.remove('is-leaving');
+        p.hidden = true;
+      });
+      stage.style.height = '';
+    };
+
     const switchTo = (name) => {
       const next = panels.find((p) => p.dataset.panel === name);
       const cur  = panels.find((p) => p.classList.contains('is-active'));
       if (!next || next === cur) return;
+      settle();
 
       tabs.forEach((t) => {
         const on = t.dataset.tab === name;
@@ -353,7 +453,8 @@
         next.classList.remove('is-entering');
         next.classList.add('is-active');
 
-        window.setTimeout(() => {
+        swapTimer = window.setTimeout(() => {
+          swapTimer = 0;
           cur.classList.remove('is-leaving');
           cur.hidden = true;
           stage.style.height = '';
@@ -362,7 +463,8 @@
 
       /* anything waiting to reveal inside the new panel arrives with it */
       $$('[data-reveal]:not(.is-in), [data-split]:not(.is-in)', next)
-        .forEach((el, i) => window.setTimeout(() => el.classList.add('is-in'), i * 45));
+        .forEach((el, i) => staggerTimers.push(
+          window.setTimeout(() => el.classList.add('is-in'), i * 45)));
     };
 
     tabs.forEach((tab) => tab.addEventListener('click', () => switchTo(tab.dataset.tab)));
@@ -401,17 +503,25 @@
 
   const bindTilt = (hit, target, amount) => {
     if (!hit || !target) return;
-    let raf = null, rx = 0, ry = 0;
+    let raf = null, px = 0, py = 0;
     const enter = () => target.classList.add('is-tracking');
+    /* The box was measured on every pointermove — and a mouse reports far
+       more often than the screen refreshes, up to 1000Hz on a gaming
+       mouse, so a single pass across a card forced dozens of layouts to
+       produce one frame. The event now only records where the cursor is;
+       the measurement happens inside the frame that is going to use it,
+       at most once per frame, at the point where layout is still clean. */
     const move = (e) => {
-      const r = hit.getBoundingClientRect();
-      rx = clamp(((e.clientX - r.left) / r.width  - 0.5) * 2) * amount;
-      ry = clamp(((e.clientY - r.top)  / r.height - 0.5) * 2) * amount;
+      px = e.clientX; py = e.clientY;
       if (raf) return;
       raf = requestAnimationFrame(() => {
+        raf = null;
+        const r = hit.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        const rx = clamp(((px - r.left) / r.width  - 0.5) * 2) * amount;
+        const ry = clamp(((py - r.top)  / r.height - 0.5) * 2) * amount;
         target.style.setProperty('--rx', rx.toFixed(2));
         target.style.setProperty('--ry', ry.toFixed(2));
-        raf = null;
       });
     };
     const leave = () => {
@@ -452,16 +562,37 @@
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(hero);
     }
     let drifting = false;
+    let sent = '';
     onScroll(() => {
       if (reduced.matches) {
-        if (drifting) { bgText.style.transform = ''; drifting = false; }
+        if (drifting) { bgText.style.transform = ''; drifting = false; sent = ''; }
         return;
       }
       if (!visible) return;
       drifting = true;
-      bgText.style.transform = `translate3d(-50%, calc(-50% + ${window.scrollY * 0.22}px), 0)`;
+      const t = `translate3d(-50%, calc(-50% + ${window.scrollY * 0.22}px), 0)`;
+      if (t === sent) return;
+      sent = t;
+      bgText.style.transform = t;
     });
   }
+
+  /* ------------------------------------------- loops that left the screen
+     The marquee and the logo's float are compositor animations, so they are
+     cheap to paint — but a paused animation is not ticked at all, and the
+     layer behind it can be released. Neither carries state: they are
+     continuous loops, so they resume on the phase the reader left them on,
+     which is the phase they would have been looking at anyway. Both are
+     already `animation: none` under reduced motion; this does not reach
+     them there. */
+  const pauseOffscreen = (el) => {
+    if (!el || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(([e]) => {
+      el.classList.toggle('is-paused', !e.isIntersecting);
+    }, { rootMargin: '10% 0px' }).observe(el);
+  };
+  pauseOffscreen($('.marquee__inner'));
+  pauseOffscreen($('.hero__logo-float'));
 
   /* ==================================================== 10 · FORM ==== */
   const form   = $('#contact-form');
@@ -526,14 +657,52 @@
      is simply already written.
 
      So a pointer replays it. Only where there is a pointer to replay it with,
-     and never under reduced motion -- `fine()` is already both of those. */
+     and never under reduced motion -- `fine()` is already both of those.
+
+     The engine is also no longer part of the page's arrival. It is 70 KB,
+     nearly all of it the recorded pen path, and it used to be fetched,
+     parsed and evaluated on every visit while the hero was still coming
+     in -- for a canvas that sits at the very bottom of the document, which
+     most readers reach seconds later and many never reach at all. It is
+     fetched when the footer comes within a viewport and a half instead,
+     which is far enough ahead that it has always arrived before the
+     engine's own observer decides to start writing. Nothing about the
+     writing itself changed: the same file, the same 2.4s, the same
+     trigger. */
   const assinatura = $('.assinatura');
-  if (assinatura && fine()) {
-    assinatura.addEventListener('pointerenter', () => {
-      const engine = window.__assinatura;
-      if (engine && engine.play) engine.play();
-    });
+  if (assinatura) {
+    let asked = false;
+    const loadEngine = () => {
+      if (asked) return;
+      asked = true;
+      const s = document.createElement('script');
+      s.src = 'js/assinatura.js';
+      s.async = true;
+      document.body.appendChild(s);
+    };
+
+    if ('IntersectionObserver' in window) {
+      const ao = new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        ao.disconnect();
+        loadEngine();
+      }, { rootMargin: '150% 0px' });
+      ao.observe(assinatura);
+    } else {
+      window.addEventListener('load', loadEngine, { once: true });
+    }
+
+    if (fine()) {
+      assinatura.addEventListener('pointerenter', () => {
+        loadEngine();
+        const engine = window.__assinatura;
+        if (engine && engine.play) engine.play();
+      });
+    }
   }
+
+  /* Every subscriber's first run, once, now that they are all registered. */
+  flushScroll();
 
   console.log('%cL&D Engenharia', 'font:700 20px Syne,sans-serif;color:#581328');
   console.log('%cEmpresa Júnior · UNESP São João da Boa Vista', 'color:#7a5c64');
