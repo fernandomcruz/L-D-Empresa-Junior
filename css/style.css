@@ -577,8 +577,14 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
      word sits and which way it faces are decided here, so the narrow layout
      can stand the same element on its end without the script knowing. */
   transform: translate3d(-50%, calc(-50% + var(--drift, 0px)), 0);
-  will-change: transform;
 }
+/* The word is only rewritten while the hero is on screen, so the layer is
+   only worth holding for that long. The observer in js/main.js carries the
+   class, the same way `.is-scrubbing` carries the quote's — on a phone this
+   is display-size type standing the full height of the screen, and keeping
+   its texture alive for the other ten thousand pixels of the page is memory
+   Safari would rather spend on what is actually being looked at. */
+.hero__bg-text.is-drifting { will-change: transform; }
 /* it drifts with the scroll (JS) and fades up with the rest of the hero */
 .js .hero__bg-text { opacity: 0; }
 .js .hero.is-ready .hero__bg-text {
@@ -775,7 +781,12 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
-.marquee__inner { display: flex; width: max-content; animation: marquee 46s linear infinite; }
+/* 23s, not 46s, and the speed on screen is unchanged: each track now holds
+   the seven-word cycle once instead of twice, so the -50% the animation
+   travels is half the distance it used to be. The fita that gets composited
+   is half as wide with it — it was around 4000px, and a layer that wide has
+   to be split into tiles and re-rastered as it moves on a phone. */
+.marquee__inner { display: flex; width: max-content; animation: marquee 23s linear infinite; }
 .marquee:hover .marquee__inner { animation-play-state: paused; }
 .marquee__track { display: flex; align-items: center; gap: 30px; padding-right: 30px; flex-shrink: 0; }
 .marquee__track span {
@@ -2036,6 +2047,38 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
    any input under 16px, which makes iOS Safari zoom the page on focus and
    never zoom back. */
 @media (pointer: coarse) {
+  /* ------------------------------------------- the flat versions
+     Nothing below changes a single pixel. Every rule here replaces a
+     transform that CONTAINS a 3D function with the 2D transform it already
+     evaluates to on a touch device — and a 3D function is what makes a
+     browser hold a compositor layer for the element forever, whether or not
+     the transform actually does anything.
+
+     That mattered here because this page ends up holding a lot of them at
+     once: three project cards the size of the screen, the hero mark, and one
+     per word across six split headings. On a phone those are tens of
+     megabytes of texture that Safari has to keep, and when it runs short it
+     drops them and rasterises again mid-scroll — which is the stutter that
+     has nothing to do with how much work the frame is doing. */
+
+  /* The tilt binds only where the pointer is fine (see syncTilt in
+     js/main.js), so on a touch screen --rx and --ry are never written and
+     both rotations are permanently 0deg. A perspective with nothing rotated
+     inside it is the identity: `scale()` alone is the same matrix, and the
+     hover scale still composes through --s exactly as before. */
+  .hero__logo-3d,
+  .projeto-card__inner { transform: scale(var(--s, 1)); }
+
+  /* The masked rise, in 2D. The travel is identical — 120% of the line box,
+     same easing, same stagger — but the word lets its layer go once it has
+     landed instead of keeping one for the rest of the session. iOS draws
+     text with grayscale antialiasing either way, so the settled word is
+     rasterised exactly as it was. */
+  .js .ln__i, .js .w__i { transform: translateY(120%); }
+  .js .is-in .ln__i,
+  .js .is-in .w__i,
+  .js .hero.is-ready .ln__i { transform: translateY(0); }
+
   .form__input { font-size: 1rem; }
   .footer__links a,
   .footer__contact a { padding-block: 7px; }

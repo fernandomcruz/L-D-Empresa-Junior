@@ -699,8 +699,16 @@
   const bgText = $('.hero__bg-text');
   if (bgText && hero) {
     let visible = true;
+    /* `is-drifting` is what holds the compositor layer (see the stylesheet).
+       It goes on with the writes and comes off with them, so the word keeps
+       a texture for the one screen where it moves rather than for the whole
+       document under it. */
+    bgText.classList.add('is-drifting');
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(hero);
+      new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+        bgText.classList.toggle('is-drifting', visible);
+      }, { threshold: 0 }).observe(hero);
     }
     let drifting = false;
     let sent = '';

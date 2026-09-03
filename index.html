@@ -111,10 +111,17 @@
   </section>
 
   <!-- MARQUEE -->
+  <!-- Duas trilhas, e nao mais: a animação desloca -50% da fita, que é
+       exatamente a largura de uma trilha, então duas idênticas emendam sem
+       costura. Cada trilha carrega o ciclo de sete palavras UMA vez — antes
+       carregava duas, o que dobrava a largura da camada composta sem mudar
+       nada do que se vê, porque a sequência infinita é a mesma. A duração em
+       css/style.css acompanha essa largura: metade da fita, metade do tempo,
+       mesma velocidade na tela. -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee__inner">
-      <div class="marquee__track"><span>Aeronáutica</span><i class="dot" aria-hidden="true"></i><span>Telecomunicações</span><i class="dot" aria-hidden="true"></i><span>Eletrônica</span><i class="dot" aria-hidden="true"></i><span>IoT</span><i class="dot" aria-hidden="true"></i><span>Projetos</span><i class="dot" aria-hidden="true"></i><span>Inovação</span><i class="dot" aria-hidden="true"></i><span>UNESP</span><i class="dot" aria-hidden="true"></i><span>Aeronáutica</span><i class="dot" aria-hidden="true"></i><span>Telecomunicações</span><i class="dot" aria-hidden="true"></i><span>Eletrônica</span><i class="dot" aria-hidden="true"></i><span>IoT</span><i class="dot" aria-hidden="true"></i><span>Projetos</span><i class="dot" aria-hidden="true"></i><span>Inovação</span><i class="dot" aria-hidden="true"></i><span>UNESP</span><i class="dot" aria-hidden="true"></i></div>
-      <div class="marquee__track"><span>Aeronáutica</span><i class="dot" aria-hidden="true"></i><span>Telecomunicações</span><i class="dot" aria-hidden="true"></i><span>Eletrônica</span><i class="dot" aria-hidden="true"></i><span>IoT</span><i class="dot" aria-hidden="true"></i><span>Projetos</span><i class="dot" aria-hidden="true"></i><span>Inovação</span><i class="dot" aria-hidden="true"></i><span>UNESP</span><i class="dot" aria-hidden="true"></i><span>Aeronáutica</span><i class="dot" aria-hidden="true"></i><span>Telecomunicações</span><i class="dot" aria-hidden="true"></i><span>Eletrônica</span><i class="dot" aria-hidden="true"></i><span>IoT</span><i class="dot" aria-hidden="true"></i><span>Projetos</span><i class="dot" aria-hidden="true"></i><span>Inovação</span><i class="dot" aria-hidden="true"></i><span>UNESP</span><i class="dot" aria-hidden="true"></i></div>
+      <div class="marquee__track"><span>Aeronáutica</span><i class="dot" aria-hidden="true"></i><span>Telecomunicações</span><i class="dot" aria-hidden="true"></i><span>Eletrônica</span><i class="dot" aria-hidden="true"></i><span>IoT</span><i class="dot" aria-hidden="true"></i><span>Projetos</span><i class="dot" aria-hidden="true"></i><span>Inovação</span><i class="dot" aria-hidden="true"></i><span>UNESP</span><i class="dot" aria-hidden="true"></i></div>
+      <div class="marquee__track"><span>Aeronáutica</span><i class="dot" aria-hidden="true"></i><span>Telecomunicações</span><i class="dot" aria-hidden="true"></i><span>Eletrônica</span><i class="dot" aria-hidden="true"></i><span>IoT</span><i class="dot" aria-hidden="true"></i><span>Projetos</span><i class="dot" aria-hidden="true"></i><span>Inovação</span><i class="dot" aria-hidden="true"></i><span>UNESP</span><i class="dot" aria-hidden="true"></i></div>
     </div>
   </div>
 
