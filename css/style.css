@@ -573,7 +573,10 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
-  transform: translate3d(-50%, -50%, 0);
+  /* --drift is the scroll distance, written by the motion layer; where the
+     word sits and which way it faces are decided here, so the narrow layout
+     can stand the same element on its end without the script knowing. */
+  transform: translate3d(-50%, calc(-50% + var(--drift, 0px)), 0);
   will-change: transform;
 }
 /* it drifts with the scroll (JS) and fades up with the rest of the hero */
@@ -1772,6 +1775,13 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   .nav__logo-img { width: 2.5rem; height: 2.5rem; }
   .nav__logo-text { font-size: 1.15rem; }
 
+  /* ------------------------------------------------------------- THE HERO
+     Below 820 the two columns are gone, and with them both things that gave
+     the wide hero its weight: the wine sphere and the word laid across the
+     middle. The column is centred, as the rest of the page is; what carries
+     it is the word, stood on its end and left behind everything as
+     background, and the three readings closing the block on one rule.
+     ---------------------------------------------------------------------- */
   .hero {
     display: flex;
     flex-direction: column;
@@ -1779,34 +1789,110 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
     /* the grid rule centres on the cross axis; in a column that would
        shrink-wrap every child, so hand the width back */
     align-items: stretch;
-    min-height: auto;
-    padding-block: calc(var(--nav-h) + 48px) 0;
+    /* the first screen is the hero's again — it earned the height back the
+       moment it had something standing in it */
+    min-height: 100svh;
+    padding-block: calc(var(--nav-h) + 64px) 26px;
   }
-  /* one column, so the title can keep the steeper slope the two-column
-     layout had to give up */
-  /* One column, so the title keeps the steeper slope the two-column layout
-     had to give up. The floor is itself a clamp: flat 1.75rem down to
-     360px, then tapering, because below that "com propósito" no longer
-     fits a single line and the three-line composition would break. */
-  .hero__title {
-    font-size: clamp(clamp(1.5rem, 7.6vw, 1.95rem), 5.6vw, 5rem);
-    margin-bottom: 22px;
+
+  /* The grid was lit at 68% across, which is where the sphere used to be.
+     The sphere is not here and the column is centred, so the light moves to
+     the middle with it. */
+  .hero__blueprint {
+    -webkit-mask-image: radial-gradient(155% 70% at 50% 44%, #000 6%, transparent 80%);
+            mask-image: radial-gradient(155% 70% at 50% 44%, #000 6%, transparent 80%);
   }
-  .hero__bg-text { display: none; }
+
+  /* The word stands up and stays behind everything, which is the job it
+     already has on a wide screen — same filled ghost, same 7%, turned a
+     quarter so it has somewhere to be in a single narrow column. It runs
+     the height of the screen and sits in the gutter the centred column
+     leaves free, so it reads as a watermark on the page rather than as a
+     column of its own that the text has to make room for. */
+  .hero__bg-text {
+    display: block;
+    top: 50%;
+    left: var(--edge-l);
+    writing-mode: vertical-rl;
+    font-size: clamp(58px, 17vw, 96px);
+    /* Stood on its end, the line box's LEADING is what sets the column's
+       width, not the glyphs — at the inherited 1.6 the word claimed half
+       again the room it needed and pushed itself off the left edge. */
+    line-height: 1;
+    letter-spacing: 0.02em;
+    transform: translate3d(0, calc(-50% + var(--drift, 0px)), 0);
+  }
+
   .hero__visual { display: none; }
-  .hero__content { padding-block: 0 40px; }
-  .hero__subtitle { margin-bottom: 28px; font-size: 1rem; }
-  .hero__actions { margin-bottom: 30px; }
-  /* stacked, the three readings are centred in even thirds instead */
+  /* The two auto margins are what place the block in the screen. Centring
+     both children together left the readings stranded with a hole under
+     them and the marquee a long way off; an auto above each one hands the
+     spare height to the top and to the gap in equal parts instead, which
+     drops the whole column and settles the readings on the bottom edge
+     where they close the hero against the strip. The padding is the floor
+     under that gap, for the short viewport where there is no spare height
+     to hand out and both autos collapse to nothing. */
+  .hero__content { margin-top: auto; padding-block: 0 24px; }
+
+  /* The three lines are broken by hand in the markup, so not one of them
+     may ever outgrow the column: a line that wraps inside its own masked
+     shell comes out cut in half. The size is therefore read off the column
+     rather than guessed at. 0.086 of it is what holds "com propósito", the
+     longest of the three, on one line with a little air left, at every
+     width from 280px up — and it keeps holding it if the page gutters are
+     ever retuned, because they are in the sum. */
+  .hero__title {
+    font-size: clamp(1.1rem,
+                     calc((100vw - var(--edge-l) - var(--edge-r)) * 0.086),
+                     5rem);
+    /* The deck's own leading already opens a dozen pixels under the last
+       line of the title, so the margin is the remainder and not the gap. */
+    margin-bottom: 8px;
+  }
+  /* Tight where the parts belong together, open where the reader changes
+     gear: the deck sits close under the title it explains, the buttons get
+     air before them because they are the turn from reading to doing, and
+     the credential is far enough below to read as a footnote to all of it
+     rather than as a third line of the same block. */
+  .hero__subtitle {
+    margin-bottom: 34px;
+    font-size: 1rem;
+    max-width: 40ch;
+    /* four centred lines, so the last one is kept off a single orphan */
+    text-wrap: pretty;
+  }
+  .hero__actions { margin-bottom: 32px; }
+  /* two centred lines break far more evenly balanced than they do filled */
+  .hero__credential { text-wrap: balance; }
+
+  /* ---- the readings close the hero on one rule ---- */
   .hero__stats {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-content: normal;
-    margin-top: 8px;
+    margin-top: auto;
   }
-  /* the stats' padding is set by the centring block further down, which
-     shares this breakpoint and comes later — declaring it here as well
-     only produced two values the cascade immediately threw away */
-  .stat__label { font-size: 0.6rem; letter-spacing: 0.12em; }
+  /* the reading first and its name under it, which is the order a legend is
+     read in — the markup keeps the <dt> before its <dd> either way */
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    /* symmetric, or the centred pair sits off-centre inside its own cell */
+    padding: 24px 8px 0;
+  }
+  .stat + .stat { padding-left: 8px; }
+  .stat + .stat::before { top: 24px; height: 28px; }
+  /* The block spans the sheet at every width in this range, so both sizes
+     are tied to the sheet rather than pinned: on a phone the readings sit
+     just above their captions, on a tablet the same block opens up with
+     the page instead of leaving the strip looking undersized in it. */
+  .stat__value { font-size: clamp(1.45rem, 5.8vw, 2.4rem); margin-bottom: 6px; }
+  .stat__label {
+    font-size: clamp(0.52rem, 1.5vw, 0.68rem);
+    letter-spacing: 0.11em;
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
 
   .sobre__grid { grid-template-columns: minmax(0, 1fr); gap: 44px; }
   .projetos__grid { grid-template-columns: minmax(0, 1fr); }
@@ -1877,18 +1963,14 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
 
   .servico__link { align-self: center; }
 
-  /* The three contact rows keep their left-aligned icon + value pair. They
-     are stacked panels of equal width, so their own left edge is the second
-     column a centred row would have nothing to align with. */
-  .contato__item { text-align: start; }
-
   /* a lead-in rule on one side only reads as a lead-in while the line is
      ragged left; centred, it just looks like a stray dash */
   .hero__credential-rule { display: none; }
 
-  /* symmetric padding, or centred text sits off-centre inside its own cell */
-  .stat { padding: 20px 10px 30px; }
-  .stat + .stat { padding-left: 10px; }
+  /* The three contact rows keep their left-aligned icon + value pair. They
+     are stacked panels of equal width, so their own left edge is the second
+     column a centred row would have nothing to align with. */
+  .contato__item { text-align: start; }
 
   /* a sideways slide on hover reads as a misalignment once the row is
      centred, so the centred footer links deepen without travelling */
@@ -1907,11 +1989,12 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
 
 /* --- small phones ----------------------------------------------------- */
 @media (max-width: 520px) {
-  .hero__stats { grid-template-columns: minmax(0, 1fr); }
-  .stat { padding: 16px 0; border-top: 1px solid var(--line); }
-  .stat:first-child { border-top: none; }
-  .stat + .stat { padding-left: 0; }
-  .stat + .stat::before { display: none; }
+  /* The title block keeps its three columns all the way down. Stacked, the
+     three readings became three full-width rows and spent half the screen
+     saying 2, 29 and 2; what gives instead is the type inside them. */
+  .stat { padding: 20px 5px 0; }
+  .stat + .stat { padding-left: 6px; }
+  .stat__label { font-size: 0.5rem; letter-spacing: 0.07em; }
 
   .hero__credential { font-size: 0.64rem; letter-spacing: 0.1em; }
 

@@ -4,8 +4,8 @@
     {
       "name": "led-static",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5599"],
-      "port": 5599
+      "runtimeArgs": ["-m", "http.server", "5611"],
+      "port": 5611
     }
   ]
 }

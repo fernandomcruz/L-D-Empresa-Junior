@@ -185,7 +185,9 @@
     const words = $$('.w__i', el);
     /* what was last written to each word, so a word that has not actually
        moved this frame is not handed the same string again */
-    return { el, words, sent: new Array(words.length), lastP: -1, top: 0, h: 0, live: false };
+    /* `cur` is where the wave actually is, which lags where the scroll says
+       it should be — see the damping below. -1 means "not yet placed". */
+    return { el, words, sent: new Array(words.length), cur: -1, top: 0, live: false };
   });
 
   if (scrubbed.length) {
@@ -209,8 +211,6 @@
           const it = scrubbed[s];
           const r = it.el.getBoundingClientRect();
           it.top = r.top + y;
-          it.h   = r.height;
-          it.lastP = -1;
         }
       };
       onMeasure(measureScrub);
@@ -239,39 +239,110 @@
         scrubbed.forEach((it) => { it.live = true; it.el.classList.add('is-scrubbing'); });
       }
 
-      onScroll(() => {
+      /* ------------------------------------------------ the damping
+         Tying the words directly to the scroll position looked right on
+         paper and wrong in the hand. A wheel does not report a continuous
+         position: one notch is a single jump of roughly a hundred pixels,
+         so the wave did not glide across the sentence, it landed in about a
+         dozen discrete shoves. That reads as stutter no matter how many
+         frames a second the page is drawing — and it is why this still felt
+         stuck after the paint cost was gone.
+
+         So the scroll now sets a TARGET and the wave chases it, closing a
+         fixed proportion of the remaining distance every frame. A notch of
+         the wheel becomes a push the words glide out over the next few
+         frames instead of a teleport. The proportion is derived from the
+         real elapsed time rather than assumed per frame, so the glide takes
+         the same fraction of a second at 60Hz, at 120Hz, and on a frame
+         that arrived late.
+
+         TAU is how long it takes to close about two thirds of the gap.
+         Under roughly 70ms the shoves start showing through again; much
+         over 140ms and the sentence lags visibly behind the scroll. */
+      const TAU = 105;
+      const SETTLED = 0.0004;  /* closer than this and the eye cannot tell */
+
+      let raf = 0;
+      let lastT = 0;
+
+      /* Where the wave WANTS to be, straight off the scroll position. */
+      const targetOf = (it, y) => {
+        const top  = it.top - y;             /* viewport-relative, no layout read */
+        const from = viewH * 0.92;
+        const to   = viewH * 0.30;
+        const p = (from - top) / (from - to);
+        return p < 0 ? 0 : p > 1 ? 1 : p;
+      };
+
+      const paint = (it) => {
+        const words = it.words, sent = it.sent, p = it.cur;
+        const span = words.length + OVERLAP;
+        for (let i = 0; i < words.length; i++) {
+          let wp = (p * span - i) / OVERLAP;
+          wp = wp < 0 ? 0 : wp > 1 ? 1 : wp;
+          /* Each word also carries its own ease. A linear ramp meant every
+             word travelled at one flat speed and stopped dead on arrival;
+             the cubic lets it come up quickly and settle into the line,
+             which is what makes the wave read as one motion rather than
+             twenty little slides. */
+          const e = 1 - (1 - wp) * (1 - wp) * (1 - wp);
+          /* Only a handful of words are in flight at a time; the ones
+             already home and the ones still waiting resolve to the
+             identical transform frame after frame. Writing it again would
+             invalidate their style for nothing. */
+          const t = `translate3d(0, ${((1 - e) * 118).toFixed(2)}%, 0)`;
+          if (sent[i] === t) continue;
+          sent[i] = t;
+          words[i].style.transform = t;
+        }
+      };
+
+      const tick = (now) => {
+        raf = 0;
+        /* A frame that arrived late must not be allowed to close the whole
+           gap at once — that is the teleport this exists to remove. */
+        const dt = lastT ? Math.min(now - lastT, 50) : 16.7;
+        lastT = now;
+        const k = 1 - Math.exp(-dt / TAU);
+
         const y = window.scrollY;
+        let moving = false;
+
         for (let s = 0; s < scrubbed.length; s++) {
           const it = scrubbed[s];
           if (!it.live) continue;
-          const top = it.top - y;            /* viewport-relative, no layout read */
-          if (top + it.h < -240 || top > viewH + 240) continue;
-          const from = viewH * 0.92;
-          const to   = viewH * 0.30;
-          let p = (from - top) / (from - to);
-          p = p < 0 ? 0 : p > 1 ? 1 : p;
-          /* Above the band and below it the quote is fully settled, so the
-             clamp holds p at the same value across long stretches of
-             scrolling. Nothing has moved: skip the whole block. */
-          if (p === it.lastP) continue;
-          it.lastP = p;
+          const target = targetOf(it, y);
 
-          const words = it.words, sent = it.sent;
-          const span = words.length + OVERLAP;
-          for (let i = 0; i < words.length; i++) {
-            let wp = (p * span - i) / OVERLAP;
-            wp = wp < 0 ? 0 : wp > 1 ? 1 : wp;
-            /* Only six words are in flight at a time; the ones already
-               home and the ones still waiting resolve to the identical
-               transform frame after frame. Writing it again would
-               invalidate their style for nothing. */
-            const t = `translate3d(0, ${((1 - wp) * 118).toFixed(2)}%, 0)`;
-            if (sent[i] === t) continue;
-            sent[i] = t;
-            words[i].style.transform = t;
+          /* First sight: start ON the target rather than gliding in from
+             wherever the last visit left the wave — and draw it, because
+             the settle test below would otherwise read "already there" and
+             leave the words sitting on the resting offset CSS gave them. */
+          if (it.cur < 0) { it.cur = target; paint(it); continue; }
+
+          const d = target - it.cur;
+          if (d > -SETTLED && d < SETTLED) {
+            if (it.cur === target) continue;   /* already there, nothing to draw */
+            it.cur = target;
+          } else {
+            it.cur += d * k;
+            moving = true;
           }
+          paint(it);
         }
-      });
+
+        /* The loop only lives while something is actually in motion: it
+           starts on a scroll, coasts for the few frames the wave needs to
+           catch up, and then stops until the next one. */
+        if (moving) raf = requestAnimationFrame(tick);
+        else lastT = 0;
+      };
+
+      const wake = () => {
+        if (raf) return;
+        lastT = 0;
+        raf = requestAnimationFrame(tick);
+      };
+      onScroll(wake);
     }
   }
 
@@ -618,9 +689,13 @@
   onMedia(coarse, syncTilt);
   onMedia(reduced, syncTilt);
 
-  /* The ghost word drifts against the scroll. It is display:none below the
-     820px breakpoint, so the subscription costs a rect read and nothing
-     else there; the observer keeps it idle off-screen. */
+  /* The ghost word drifts against the scroll. What is written here is only
+     the DISTANCE — the transform that carries it belongs to the stylesheet,
+     because the two layouts hold the word differently: laid flat across the
+     middle on a wide screen, stood on its end in the left margin on a
+     narrow one. Writing a finished transform from here meant this line
+     silently decided which of the two won, and the narrow one always lost.
+     The observer keeps it idle while the hero is off-screen. */
   const bgText = $('.hero__bg-text');
   if (bgText && hero) {
     let visible = true;
@@ -631,15 +706,15 @@
     let sent = '';
     onScroll(() => {
       if (reduced.matches) {
-        if (drifting) { bgText.style.transform = ''; drifting = false; sent = ''; }
+        if (drifting) { bgText.style.removeProperty('--drift'); drifting = false; sent = ''; }
         return;
       }
       if (!visible) return;
       drifting = true;
-      const t = `translate3d(-50%, calc(-50% + ${window.scrollY * 0.22}px), 0)`;
+      const t = `${(window.scrollY * 0.22).toFixed(1)}px`;
       if (t === sent) return;
       sent = t;
-      bgText.style.transform = t;
+      bgText.style.setProperty('--drift', t);
     });
   }
 
