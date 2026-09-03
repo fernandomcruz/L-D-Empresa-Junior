@@ -305,6 +305,13 @@ html { scrollbar-color: var(--line-2) transparent; scrollbar-width: thin; }
   transition: none !important;
   transition-delay: 0s !important;
 }
+/* A transform written from script is not a compositor animation, so without
+   a layer of its own each word rewrite repainted display-size text — and the
+   masked blueprint sitting under it — on the main thread, sixty times a
+   second. `.is-scrubbing` is put on by the observer only while the quote is
+   near its band and taken off again on the way out, so the layers are held
+   for the seconds they earn and released the rest of the time. */
+.js [data-scrub].is-scrubbing .w__i { will-change: transform; }
 .js .hero.is-ready .ln__i { transition-delay: calc(var(--wi, 0) * 90ms); }
 
 /* headings stay blank until the script has split them, so the words never
@@ -326,16 +333,27 @@ html { scrollbar-color: var(--line-2) transparent; scrollbar-width: thin; }
      apart with nothing between them */
   padding-inline: var(--edge-l) var(--edge-r);
   background: rgba(240, 234, 229, 0.72);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.35);
+  -webkit-backdrop-filter: blur(12px) saturate(1.35);
   border-bottom: 1px solid transparent;
+  /* The bar is fixed and slides on transform; the hint keeps it on one
+     stable layer instead of being promoted and dropped around each move. */
+  will-change: transform;
   transition: transform 0.5s var(--ease-out),
               background 0.4s ease,
               border-color 0.4s ease;
 }
+/* Re-blurring the full width of the viewport behind a fixed bar is the most
+   expensive thing on this page and the compositor redoes it on every
+   scrolled frame — it was costing frames in every section, not just here.
+   Stuck, the bar sits at 94% creme, where a blur behind it cannot be seen;
+   so the filter is dropped for the whole time the reader is scrolling and
+   kept only at the top of the page, where the bar really is glass. */
 .nav.is-stuck {
-  background: rgba(240, 234, 229, 0.9);
+  background: rgba(240, 234, 229, 0.94);
   border-bottom-color: var(--line);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .nav.is-hidden { transform: translate3d(0, -100%, 0); }
 
@@ -939,8 +957,15 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   clip-path: circle(0% at 50% 112%);
   transition: clip-path 0.62s var(--ease-out);
 }
+/* clip-path is a paint property — the bloom cannot be handed to the
+   compositor, so it is redrawn on the main thread for its whole run. The
+   hint at least warns the browser a frame ahead, and it is carried by the
+   hover rule so a cell at rest asks for nothing. */
 .servico:hover::before,
-.servico:focus-within::before { clip-path: circle(142% at 50% 112%); }
+.servico:focus-within::before {
+  clip-path: circle(142% at 50% 112%);
+  will-change: clip-path;
+}
 
 .servico__head {
   display: flex;
@@ -1043,11 +1068,20 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   padding-inline: var(--edge-l) var(--edge-r);
   background: var(--vinho);
   overflow: hidden;
+  /* The section already clips. Saying so lets the browser confine the
+     quote's per-frame repaint to these bounds instead of walking outwards
+     to work out what else the change could have touched. */
+  contain: paint;
 }
 .diferencial__blueprint {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* The grid never moves, but a radial mask over two repeating gradients is
+     one of the more expensive things on the page to rasterise. On its own
+     layer it is drawn once and re-used; sharing one with the quote meant
+     redrawing it every time a word moved. */
+  transform: translateZ(0);
   background:
     repeating-linear-gradient(to right,  var(--line-on-dark) 0 1px, transparent 1px 76px),
     repeating-linear-gradient(to bottom, var(--line-on-dark) 0 1px, transparent 1px 76px);
@@ -1099,7 +1133,14 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
              scale(var(--s, 1));
   transition: transform 0.6s var(--ease-out), box-shadow 0.4s;
 }
-.projeto-card__inner.is-tracking { transition: transform 0.12s ease-out, box-shadow 0.4s; }
+/* While the pointer is on the card its transform is rewritten every frame,
+   so the layer is claimed up front rather than being made and thrown away
+   around each move. It goes with the class, so a card at rest holds
+   nothing. */
+.projeto-card__inner.is-tracking {
+  transition: transform 0.12s ease-out, box-shadow 0.4s;
+  will-change: transform;
+}
 .projeto-card--large .projeto-card__inner { min-height: 360px; }
 .projeto-card:hover .projeto-card__inner {
   --s: 1.02;
@@ -1147,9 +1188,12 @@ body.menu-open .nav__hamburger.is-open span { background: var(--vinho); }
   padding: 6px 14px;
   border: 1px solid rgba(240, 234, 229, 0.3);
   border-radius: 100px;
-  background: rgba(240, 234, 229, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* This pill used to frost its backdrop. It sits on a photo that is already
+     darkened and covered by a gradient scrim, so the blur bought almost
+     nothing visually — but it had to be recomputed on every frame of the
+     card's tilt, once per card, which is what made the hover feel heavy.
+     A little more creme in the fill reads the same and costs nothing. */
+  background: rgba(240, 234, 229, 0.3);
   color: var(--creme);
   font-family: var(--font-display);
   font-size: 0.7rem;

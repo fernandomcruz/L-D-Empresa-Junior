@@ -49,10 +49,19 @@
   let docMax = 0;
   let metricsDirty = true;
 
+  /* Anything else that needs a rectangle measures HERE and nowhere else.
+     The top of the frame is the one moment in the cycle where the tree is
+     clean — nothing has been written since the last paint — so a read costs
+     a lookup instead of a forced style recalc and layout. Effects then work
+     off the numbers for the rest of the frame. */
+  const measureSubs = [];
+  const onMeasure = (fn) => { measureSubs.push(fn); };
+
   const readMetrics = () => {
     metricsDirty = false;
     viewH = window.innerHeight;
     docMax = document.documentElement.scrollHeight - viewH;
+    for (let i = 0; i < measureSubs.length; i++) measureSubs[i]();
   };
 
   const flushScroll = () => {
@@ -101,6 +110,15 @@
     queueResize();
     window.setTimeout(queueResize, 250);
   }, { passive: true });
+
+  /* A webfont or an image that lands late moves everything below it without
+     the window ever resizing, and a swap that grows one block while another
+     settles can leave the body the same height the observer above saw. Both
+     are one-off moments, so both simply mark the measurement stale; the next
+     frame re-reads it where reading is free. */
+  const restale = () => { metricsDirty = true; queueScroll(); };
+  window.addEventListener('load', restale, { once: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(restale);
 
   /* ============================================ 1 · SPLIT HEADINGS ==== */
   /* Wraps every word in an overflow-hidden shell so the line can rise from
@@ -167,7 +185,7 @@
     const words = $$('.w__i', el);
     /* what was last written to each word, so a word that has not actually
        moved this frame is not handed the same string again */
-    return { el, words, sent: new Array(words.length), lastP: -1 };
+    return { el, words, sent: new Array(words.length), lastP: -1, top: 0, h: 0, live: false };
   });
 
   if (scrubbed.length) {
@@ -175,14 +193,62 @@
       scrubbed.forEach(({ words }) => words.forEach((w) => { w.style.transform = 'none'; }));
     } else {
       const OVERLAP = 6; /* how many words are mid-flight at any moment */
-      onScroll(() => {
+
+      /* Where the quote sits in the DOCUMENT, not in the viewport. The old
+         loop asked the element for its rectangle on every scrolled frame,
+         and the nav writes classes in the same pass — so that read landed on
+         a tree the previous frame had already dirtied and forced a full
+         style recalc plus layout before the frame could continue. Sixty
+         forced layouts a second to move six words is the stutter. The offset
+         does not change while the page is only being scrolled, so it is
+         measured at the top of the frame and the rest is arithmetic on
+         window.scrollY, which costs nothing. */
+      const measureScrub = () => {
+        const y = window.scrollY;
         for (let s = 0; s < scrubbed.length; s++) {
           const it = scrubbed[s];
           const r = it.el.getBoundingClientRect();
-          if (r.bottom < -240 || r.top > viewH + 240) continue;
+          it.top = r.top + y;
+          it.h   = r.height;
+          it.lastP = -1;
+        }
+      };
+      onMeasure(measureScrub);
+
+      /* A compositor layer per word is what keeps the rewrite off the paint
+         path, but holding one per word for the life of the page is not free
+         either. The hint goes on only while the quote is near the band it
+         animates in and comes off on the way out, so the layers exist for
+         the few seconds the words are actually moving. */
+      if ('IntersectionObserver' in window) {
+        const lo = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            const it = scrubbed.find((x) => x.el === entry.target);
+            if (!it) return;
+            it.live = entry.isIntersecting;
+            entry.target.classList.toggle('is-scrubbing', entry.isIntersecting);
+          });
+          /* The observer is what wakes this effect up, and it fires a frame
+             or two after load — which on a page restored mid-scroll is after
+             the one pass every subscriber gets. Without this the quote would
+             hold its pre-entrance offset until something else scrolled. */
+          queueScroll();
+        }, { rootMargin: '30% 0px 30% 0px' });
+        scrubbed.forEach((it) => lo.observe(it.el));
+      } else {
+        scrubbed.forEach((it) => { it.live = true; it.el.classList.add('is-scrubbing'); });
+      }
+
+      onScroll(() => {
+        const y = window.scrollY;
+        for (let s = 0; s < scrubbed.length; s++) {
+          const it = scrubbed[s];
+          if (!it.live) continue;
+          const top = it.top - y;            /* viewport-relative, no layout read */
+          if (top + it.h < -240 || top > viewH + 240) continue;
           const from = viewH * 0.92;
           const to   = viewH * 0.30;
-          let p = (from - r.top) / (from - to);
+          let p = (from - top) / (from - to);
           p = p < 0 ? 0 : p > 1 ? 1 : p;
           /* Above the band and below it the quote is fully settled, so the
              clamp holds p at the same value across long stretches of
